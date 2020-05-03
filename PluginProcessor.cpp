@@ -151,7 +151,6 @@ void HomunculusAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    
     blitSynth.renderNextBlock(buffer, midiMessages, 0, numSamples);
 }
 
