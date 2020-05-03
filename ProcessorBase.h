@@ -13,13 +13,11 @@
 #include <JuceHeader.h>
 
 
-class ProcessorBase  : public madeUp
+class ProcessorBase  : public AudioProcessor
 {
 public:
     //==============================================================================
-    
-    //ProcessorBase(const BusesProperties& ioLayouts): AudioProcessor(ioLayouts)  {}
-    ProcessorBase(){}
+    ProcessorBase(const BusesProperties& ioLayouts): AudioProcessor(ioLayouts)  {}
     ~ProcessorBase() {}
     
     //==============================================================================
@@ -52,4 +50,5 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ProcessorBase)
 };
+
 #endif /* ProcessorBase_h */
