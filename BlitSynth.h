@@ -62,7 +62,12 @@ public:
     void renderNextBlock (AudioSampleBuffer& outputBuffer, int startSample, int numSamples) override {
         if (angleDelta != 0.0){
             while (--numSamples >= 0){
-                auto currentSample = (sin(m*currentAngle)/(m*sin(currentAngle)))*level;
+                double currentSample;
+                if (angle == 0.0){
+                    currentSample = 1.0;
+                } else {
+                    currentSample = (sin(m*currentAngle)/(m*sin(currentAngle)))*level;
+                }
                 
                 if (tailOff > 0.0){
                     currentSample *= tailOff;
