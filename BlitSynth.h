@@ -63,7 +63,7 @@ public:
         if (angleDelta != 0.0){
             while (--numSamples >= 0){
                 double currentSample;
-                if (angle == 0.0){
+                if (currentAngle == 0){
                     currentSample = 1.0;
                 } else {
                     currentSample = (sin(m*currentAngle)/(m*sin(currentAngle)))*level;
