@@ -24,7 +24,7 @@ HomunculusAudioProcessor::HomunculusAudioProcessor()
                        )
 #endif
 {
-    auto numVoices = 8;
+    auto numVoices = 16;
     
     // Add some voices...
     for (auto i = 0; i < numVoices; ++i)
