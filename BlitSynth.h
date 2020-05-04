@@ -63,6 +63,7 @@ public:
         if (angleDelta != 0.0){
             while (--numSamples >= 0){
                 double currentSample;
+                
                 if (currentAngle == 0.0){
                     currentSample = 1.0;
                 } else {

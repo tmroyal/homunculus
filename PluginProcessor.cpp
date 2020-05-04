@@ -104,7 +104,7 @@ void HomunculusAudioProcessor::changeProgramName (int index, const String& newNa
 void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     blitSynth.setCurrentPlaybackSampleRate(sampleRate);
-
+    bpf.prepareToPlay(sampleRate, samplesPerBlock);
 }
 
 void HomunculusAudioProcessor::releaseResources()
@@ -152,6 +152,9 @@ void HomunculusAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
         buffer.clear (i, 0, buffer.getNumSamples());
 
     blitSynth.renderNextBlock(buffer, midiMessages, 0, numSamples);
+    bpf.processBlock(buffer, midiMessages);
+    
+    buffer.copyFrom(1, 0, buffer, 0, 0, numSamples);
 }
 
 //==============================================================================
