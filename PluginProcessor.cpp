@@ -21,8 +21,11 @@ HomunculusAudioProcessor::HomunculusAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ),
+#else
+    :
 #endif
+        filterBankGraph  (new AudioProcessorGraph())
 {
     auto numVoices = 16;
     
@@ -104,11 +107,39 @@ void HomunculusAudioProcessor::changeProgramName (int index, const String& newNa
 void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     blitSynth.setCurrentPlaybackSampleRate(sampleRate);
-    bpf.prepareToPlay(sampleRate, samplesPerBlock);
+    
+    filterBankGraph->setPlayConfigDetails (1,1, sampleRate, samplesPerBlock);
+    
+    filterBankGraph->prepareToPlay (sampleRate, samplesPerBlock);
+    
+    filterBankGraph->clear();
+    
+    filterBankInputNode = filterBankGraph->addNode(std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioInputNode));
+    filterBankOutputNode = filterBankGraph->addNode(std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioOutputNode));
+
+    for (auto i = 0; i < NUMBER_OF_FORMANTS; i++){
+        Node::Ptr newNode = filterBankGraph->addNode(std::make_unique<HumBPF>());
+        
+        filters.push_back(newNode);
+        
+        HumBPF* newFilter = dynamic_cast<HumBPF*>(newNode->getProcessor());
+        newFilter->setFreq(440);
+        newFilter->setQ(4);
+        newFilter->prepareToPlay(sampleRate, samplesPerBlock);
+        
+        filterBankGraph->addConnection({
+            {filterBankInputNode->nodeID, 0}, {newNode->nodeID, 0}
+        });
+        
+        filterBankGraph->addConnection({
+            {newNode->nodeID, 0}, {filterBankOutputNode->nodeID, 0}
+        });
+    }
 }
 
 void HomunculusAudioProcessor::releaseResources()
 {
+     filterBankGraph->releaseResources();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -142,19 +173,18 @@ void HomunculusAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     auto numSamples = buffer.getNumSamples();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
+    // clear inputs
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
     blitSynth.renderNextBlock(buffer, midiMessages, 0, numSamples);
-    bpf.processBlock(buffer, midiMessages);
+    filterBankGraph->processBlock (buffer, midiMessages);
     
-    buffer.copyFrom(1, 0, buffer, 0, 0, numSamples);
+    // copy channel zero to all other channels
+    for (int i = 1; i < totalNumOutputChannels; ++i){
+        buffer.copyFrom(i, 0, buffer, 0, 0, numSamples);
+    }
+    
 }
 
 //==============================================================================

@@ -10,7 +10,10 @@
 
 #pragma once
 
+#define NUMBER_OF_FORMANTS 3
+
 #include <JuceHeader.h>
+#include <vector>
 #include "BlitSynth.h"
 #include "HumBPF.h"
 //==============================================================================
@@ -18,6 +21,9 @@
 */
 class HomunculusAudioProcessor  : public AudioProcessor
 {
+    using AudioGraphIOProcessor = AudioProcessorGraph::AudioGraphIOProcessor;
+    using Node = AudioProcessorGraph::Node;
+    
 public:
     //==============================================================================
     HomunculusAudioProcessor();
@@ -59,7 +65,11 @@ public:
 private:
     Synthesiser blitSynth;
     
-    HumBPF bpf;
+    std::unique_ptr<AudioProcessorGraph> filterBankGraph;
+    Node::Ptr filterBankInputNode;
+    Node::Ptr filterBankOutputNode;
+    std::vector<Node::Ptr> filters;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HomunculusAudioProcessor)
 };
