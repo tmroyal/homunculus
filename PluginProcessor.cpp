@@ -35,10 +35,17 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
         blitSynth.addVoice (new BlitSynthVoice());
     
     blitSynth.addSound (new BlitSynthSound());
+    
+    params.addParameterListener("f1freq", this);
+    params.addParameterListener("f2freq", this);
 }
 
 HomunculusAudioProcessor::~HomunculusAudioProcessor()
 {
+}
+
+void HomunculusAudioProcessor::parameterChanged (const String& parameterID, float newValue) {
+    std::cout << parameterID << "\n";
 }
 
 //==============================================================================

@@ -16,7 +16,7 @@
 //==============================================================================
 /**
 */
-class HomunculusAudioProcessorEditor  : public AudioProcessorEditor, public AudioProcessorValueTreeState::Listener
+class HomunculusAudioProcessorEditor  : public AudioProcessorEditor
 {
     typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
     
@@ -27,7 +27,6 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
-    void parameterChanged (const String& parameterID, float newValue) override;
 
 private:
     // This reference is provided as a quick way for your editor to

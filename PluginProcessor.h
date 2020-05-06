@@ -19,7 +19,7 @@
 //==============================================================================
 /**
 */
-class HomunculusAudioProcessor  : public AudioProcessor
+class HomunculusAudioProcessor  : public AudioProcessor, public AudioProcessorValueTreeState::Listener
 {
     using AudioGraphIOProcessor = AudioProcessorGraph::AudioGraphIOProcessor;
     using Node = AudioProcessorGraph::Node;
@@ -58,6 +58,9 @@ public:
     const String getProgramName (int index) override;
     void changeProgramName (int index, const String& newName) override;
 
+    // APVTS::Listener
+    void parameterChanged (const String& parameterID, float newValue) override;
+    
     //==============================================================================
     void getStateInformation (MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;

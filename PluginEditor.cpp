@@ -24,17 +24,14 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     addAndMakeVisible(f2Freq);
     f2FreqAttachment.reset(new SliderAttachment(params, "f2freq", f2Freq));
     
-    ps.addParameterListener("f1freq", this);
-    ps.addParameterListener("f2freq", this);
+
 }
 
 HomunculusAudioProcessorEditor::~HomunculusAudioProcessorEditor()
 {
 }
 // -------------
-void HomunculusAudioProcessorEditor::parameterChanged (const String& parameterID, float newValue) {
-    std::cout << parameterID << "\n";
-}
+
 
 //==============================================================================
 void HomunculusAudioProcessorEditor::paint (Graphics& g)
