@@ -12,9 +12,9 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-HomunculusAudioProcessor::HomunculusAudioProcessor()
+HomunculusAudioProcessor::HomunculusAudioProcessor():
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+     AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
                        .withInput  ("Input",  AudioChannelSet::stereo(), true)
@@ -22,18 +22,18 @@ HomunculusAudioProcessor::HomunculusAudioProcessor()
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
                        ),
-#else
-    :
 #endif
-        filterBankGraph  (new AudioProcessorGraph())
+        filterBankGraph  (new AudioProcessorGraph()),
+        params(*this, nullptr, Identifier("humunculus"), {
+            std::make_unique<AudioParameterFloat>("f1freq","F1 Freq.", 20.0, 20000, 440),
+            std::make_unique<AudioParameterFloat>("f2freq","F2 Freq.", 20.0, 20000, 440)
+        })
 {
     auto numVoices = 16;
     
-    // Add some voices...
     for (auto i = 0; i < numVoices; ++i)
         blitSynth.addVoice (new BlitSynthVoice());
     
-    // ..and give the synth a sound to play
     blitSynth.addSound (new BlitSynthSound());
 }
 
@@ -195,21 +195,25 @@ bool HomunculusAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* HomunculusAudioProcessor::createEditor()
 {
-    return new HomunculusAudioProcessorEditor (*this);
+    return new HomunculusAudioProcessorEditor (*this, params);
 }
 
 //==============================================================================
 void HomunculusAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
-    // You should use this method to store your parameters in the memory block.
-    // You could do that either as raw data, or use the XML or ValueTree classes
-    // as intermediaries to make it easy to save and load complex data.
+    auto state = params.copyState();
+    std::unique_ptr<XmlElement> xml (state.createXml());
+    copyXmlToBinary (*xml, destData);
+   
 }
 
 void HomunculusAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
-    // You should use this method to restore your parameters from this memory block,
-    // whose contents will have been created by the getStateInformation() call.
+    std::unique_ptr<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    
+    if (xmlState.get() != nullptr)
+        if (xmlState->hasTagName (params.state.getType()))
+            params.replaceState (ValueTree::fromXml (*xmlState));
 }
 
 //==============================================================================

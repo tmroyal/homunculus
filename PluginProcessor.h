@@ -70,6 +70,8 @@ private:
     Node::Ptr filterBankOutputNode;
     std::vector<Node::Ptr> filters;
     
+    AudioProcessorValueTreeState params;
+        
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HomunculusAudioProcessor)
 };
