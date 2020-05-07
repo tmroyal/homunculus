@@ -19,7 +19,6 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     // editor's size to whatever you need it to be.
     setSize (400, 300);
     
-    
     for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
         std::string num = std::to_string(i+1);
         
@@ -50,7 +49,6 @@ HomunculusAudioProcessorEditor::~HomunculusAudioProcessorEditor()
 //==============================================================================
 void HomunculusAudioProcessorEditor::paint (Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 
 }
