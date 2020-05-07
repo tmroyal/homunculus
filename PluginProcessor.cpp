@@ -24,10 +24,7 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
                        ),
 #endif
         filterBankGraph  (new AudioProcessorGraph()),
-        params(*this, nullptr, Identifier("humunculus"), {
-            std::make_unique<AudioParameterFloat>("f1freq","F1 Freq.", 20.0, 20000, 440),
-            std::make_unique<AudioParameterFloat>("f2freq","F2 Freq.", 20.0, 20000, 440)
-        })
+        params(*this, nullptr, Identifier("humunculus"), createLayout())
 {
     auto numVoices = 16;
     
@@ -36,8 +33,15 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
     
     blitSynth.addSound (new BlitSynthSound());
     
-    params.addParameterListener("f1freq", this);
-    params.addParameterListener("f2freq", this);
+    
+    // parameter listeners
+    for (auto i = 0; i < NUMBER_OF_FORMANTS; i++){
+        std::string num = std::to_string(i+1);
+        params.addParameterListener("freq"+num, this);
+        params.addParameterListener("Q"+num, this);
+        params.addParameterListener("gain"+num, this);
+    }
+    
 }
 
 HomunculusAudioProcessor::~HomunculusAudioProcessor()
@@ -45,6 +49,7 @@ HomunculusAudioProcessor::~HomunculusAudioProcessor()
 }
 
 void HomunculusAudioProcessor::parameterChanged (const String& parameterID, float newValue) {
+    // parse parameter ID
     std::cout << parameterID << "\n";
 }
 
@@ -223,9 +228,13 @@ void HomunculusAudioProcessor::setStateInformation (const void* data, int sizeIn
             params.replaceState (ValueTree::fromXml (*xmlState));
 }
 
+
+
 //==============================================================================
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new HomunculusAudioProcessor();
 }
+
+

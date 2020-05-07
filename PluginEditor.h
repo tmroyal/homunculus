@@ -12,7 +12,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-
+#include "HumConstants.h"
 //==============================================================================
 /**
 */
@@ -34,10 +34,8 @@ private:
     HomunculusAudioProcessor& processor;
     AudioProcessorValueTreeState& params;
     
-    Slider f1Freq;
-    Slider f2Freq;
-
-    std::unique_ptr<SliderAttachment> f1FreqAttachment;
-    std::unique_ptr<SliderAttachment> f2FreqAttachment;
+    OwnedArray<Slider> sliders;
+    OwnedArray<SliderAttachment> attachments;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HomunculusAudioProcessorEditor)
 };
