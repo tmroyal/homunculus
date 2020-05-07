@@ -17,23 +17,35 @@ class HumBPF : public ProcessorBase {
 public:
     HumBPF(): ProcessorBase(getBusesProperties()), freq(440), Q(10), gain(1.0)
     {
+        Random rng;
+        rnd = rng.nextFloat();
     }
     
     void prepareToPlay(double sampleRate, int samplesPerBlock) override {
         y1 = y2 = x1 = x2 = 0.0;
         setCoofs(sampleRate);
+        
     }
     
     void setFreq(double f){
         freq = f;
+        if (getSampleRate() != 0){
+            setCoofs(getSampleRate());
+        }
     }
     
     void setQ(double newQ){
         Q = newQ;
+        if (getSampleRate() != 0){
+            setCoofs(getSampleRate());
+        }
     }
     
     void setGain(double g){
         gain = g;
+        if (getSampleRate() != 0){
+            setCoofs(getSampleRate());
+        }
     }
     
     void setFreqAndQ(double f, double newQ){
@@ -60,9 +72,7 @@ public:
         auto *input = buffer.getReadPointer(0);
         
         for (int i = 0; i < numSamples; ++i){
-            //output[i] = b0*(rng.nextFloat()-0.5) + b1*x1 + b2*x2 - a1*y1 - a2*y2;
-            output[i] = b0*input[i] + b1*x1 + b2*x2 - a1*y1 - a2*y2;
-            output[i] *= gain;
+            output[i] = b0*input[i]*gain + b1*x1 + b2*x2 - a1*y1 - a2*y2;
             
             x2 = x1;
             x1 = input[i];
@@ -78,7 +88,7 @@ private:
     double y1, y2, x1, x2;
     double gain;
     
-    Random rng;
+    float rnd;
     
     static BusesProperties getBusesProperties()
     {

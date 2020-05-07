@@ -42,6 +42,10 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
         params.addParameterListener("gain"+num, this);
     }
     
+    stringValueMap["freq"] = eFreq;
+    stringValueMap["Q"] = eQ;
+    stringValueMap["gain"] = eGain;
+    
 }
 
 HomunculusAudioProcessor::~HomunculusAudioProcessor()
@@ -50,7 +54,25 @@ HomunculusAudioProcessor::~HomunculusAudioProcessor()
 
 void HomunculusAudioProcessor::parameterChanged (const String& parameterID, float newValue) {
     // parse parameter ID
-    std::cout << parameterID << "\n";
+    if (initialized){
+        auto end = parameterID.length();
+        auto ind = std::stoi(parameterID.substring(end-1, end).toStdString())-1;
+        auto type = parameterID.substring(0,end-1).toStdString();
+        
+        HumBPF* selectedBPF = dynamic_cast<HumBPF*>(filters[ind]->getProcessor());
+
+        switch(stringValueMap[type]){
+            case eFreq:
+                selectedBPF->setFreq(newValue);
+                break;
+            case eQ:
+                selectedBPF->setQ(newValue);
+                break;
+            case eGain:
+                selectedBPF->setGain(newValue);
+                break;
+        };
+    }
 }
 
 //==============================================================================
@@ -129,6 +151,8 @@ void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     filterBankInputNode = filterBankGraph->addNode(std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioInputNode));
     filterBankOutputNode = filterBankGraph->addNode(std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioOutputNode));
 
+    filters.clear();
+    
     for (auto i = 0; i < NUMBER_OF_FORMANTS; i++){
         Node::Ptr newNode = filterBankGraph->addNode(std::make_unique<HumBPF>());
         
@@ -137,8 +161,9 @@ void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
         HumBPF* newFilter = dynamic_cast<HumBPF*>(newNode->getProcessor());
         newFilter->setFreq(440);
         newFilter->setQ(4);
+        newFilter->setGain(0.2);
         newFilter->prepareToPlay(sampleRate, samplesPerBlock);
-        
+
         filterBankGraph->addConnection({
             {filterBankInputNode->nodeID, 0}, {newNode->nodeID, 0}
         });
@@ -147,6 +172,8 @@ void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
             {newNode->nodeID, 0}, {filterBankOutputNode->nodeID, 0}
         });
     }
+    
+    initialized = true;
 }
 
 void HomunculusAudioProcessor::releaseResources()

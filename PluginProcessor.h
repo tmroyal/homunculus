@@ -18,6 +18,13 @@
 //==============================================================================
 /**
 */
+
+enum StringValue{
+    eFreq,
+    eQ,
+    eGain
+};
+
 class HomunculusAudioProcessor  : public AudioProcessor, public AudioProcessorValueTreeState::Listener
 {
     using AudioGraphIOProcessor = AudioProcessorGraph::AudioGraphIOProcessor;
@@ -74,6 +81,9 @@ private:
     
     AudioProcessorValueTreeState params;
     
+    std::map<std::string,StringValue> stringValueMap;
+
+    
     static AudioProcessorValueTreeState::ParameterLayout createLayout(){
         std::vector<std::unique_ptr<AudioParameterFloat>> newParams;
         
@@ -87,7 +97,9 @@ private:
         
         return { newParams.begin(), newParams.end() };
     }
-        
+    
+    bool initialized = false;
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HomunculusAudioProcessor)
 };

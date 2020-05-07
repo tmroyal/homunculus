@@ -60,11 +60,9 @@ void HomunculusAudioProcessorEditor::resized()
     auto it = sliders.begin();
     auto end = sliders.end();
     auto i = 0;
-    std::cout << sliders.size();
     
     while (it != end){
         (**it).setBounds(10, 10+i*30, getWidth()-10, 20);
         it++; i++;
-        std::cout << i;
     }
 }
