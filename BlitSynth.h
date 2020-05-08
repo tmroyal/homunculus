@@ -31,12 +31,11 @@ public:
         params.attack = 1.0;
         params.decay = 0.5;
         params.sustain = 0.8;
-        params.release = 0.5;
+        params.release = 3.0;
         
         envelope.setSampleRate(getSampleRate());
         envelope.setParameters(params);
         
-        decayCof = (1.0/getSampleRate())/params.release;
     }
     
     bool canPlaySound(SynthesiserSound* sound) override {
@@ -46,7 +45,6 @@ public:
     void startNote ( int midiNoteNumber, float velocity, SynthesiserSound*, int curPitchWheelPos) override {
         currentAngle = 0.0;
         level = velocity*0.9;
-        tailOff = 0.0;
         
         auto cps = MidiMessage::getMidiNoteInHertz(midiNoteNumber);
         auto cyclesPerSample = cps / getSampleRate();
@@ -62,13 +60,14 @@ public:
     
     void stopNote (float, bool allowTailOff) override {
         if (allowTailOff){
-            if (tailOff == 0.0){ tailOff = 1.0; }
+            tailOff = true;
+            envelope.noteOff();
         } else {
             clearCurrentNote();
             angleDelta = 0.0;
+            envelope.reset();
         }
         
-        envelope.noteOff();
     }
     
     void pitchWheelMoved (int) override      {}
@@ -85,20 +84,18 @@ public:
                     currentSample = (sin(m*currentAngle)/(m*sin(currentAngle)))*level;
                 }
                 
-                if (tailOff > 0.0){
-                    currentSample *= tailOff;
-                    tailOff -= decayCof;
-                }
+
                 float envSample = envelope.getNextSample();
                 
                 for (auto i = outputBuffer.getNumChannels(); --i >= 0;){
                     outputBuffer.addSample(i, startSample, currentSample*envSample);
                 }
                 
-                if (tailOff <= 0.0 && tailOff <= 0.005){
+                if (tailOff == true && !envelope.isActive()){
                     clearCurrentNote();
                     envelope.reset();
                     angleDelta = 0.0;
+                    tailOff = false;
                     break;
                 }
                 
@@ -112,9 +109,9 @@ public:
 
     
 private:
-    double currentAngle = 0.0, angleDelta = 0.0, level=0.0, tailOff = 0.0;
+    double currentAngle = 0.0, angleDelta = 0.0, level=0.0;
+    bool tailOff = false;
     double m = 1.0;
-    double decayCof;
     
     ADSR envelope;
 };
