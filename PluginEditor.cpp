@@ -17,7 +17,7 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setSize (400, 600);
     
     for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
         std::string num = std::to_string(i+1);
@@ -35,9 +35,21 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         attachments.add(new SliderAttachment(params, "freq"+num, *freqSlider));
         attachments.add(new SliderAttachment(params, "Q"+num, *QSlider));
         attachments.add(new SliderAttachment(params, "gain"+num, *gainSlider));
-
     }
+    
+    
+    addAndMakeVisible(attackSlider);
+    addAndMakeVisible(decaySlider);
+    addAndMakeVisible(sustainSlider);
+    addAndMakeVisible(releaseSlider);
+    
+    attackAttachment.reset(new SliderAttachment(params, "attack", attackSlider));
+    decayAttachment.reset(new SliderAttachment(params, "decay", decaySlider));
+    sustainAttachment.reset(new SliderAttachment(params, "sustain", sustainSlider));
+    releaseAttachment.reset(new SliderAttachment(params, "release", releaseSlider));
+
     resized();
+
 }
 
 HomunculusAudioProcessorEditor::~HomunculusAudioProcessorEditor()
@@ -63,4 +75,12 @@ void HomunculusAudioProcessorEditor::resized()
         (**it).setBounds(10, 10+i*30, getWidth()-10, 20);
         it++; i++;
     }
+    
+    auto envTop = sliders.size()*30+10;
+    
+    attackSlider.setBounds(10, envTop, getWidth()-10, 20);
+    decaySlider.setBounds(10, envTop+30, getWidth()-10, 20);
+    sustainSlider.setBounds(10, envTop+60, getWidth()-10, 20);
+    releaseSlider.setBounds(10, envTop+90, getWidth()-10, 20);
+    
 }

@@ -26,9 +26,8 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
         filterBankGraph  (new AudioProcessorGraph()),
         params(*this, nullptr, Identifier("humunculus"), createLayout())
 {
-    auto numVoices = 16;
     
-    for (auto i = 0; i < numVoices; ++i)
+    for (auto i = 0; i < NUMBER_OF_VOICES; ++i)
         blitSynth.addVoice (new BlitSynthVoice());
     
     blitSynth.addSound (new BlitSynthSound());
@@ -42,10 +41,24 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
         params.addParameterListener("gain"+num, this);
     }
     
-    stringValueMap["freq"] = eFreq;
-    stringValueMap["Q"] = eQ;
-    stringValueMap["gain"] = eGain;
+    bpfParameterMap["freq"] = eFreq;
+    bpfParameterMap["Q"] = eQ;
+    bpfParameterMap["gain"] = eGain;
     
+    adsrNames.insert("attack");
+    adsrNames.insert("decay");
+    adsrNames.insert("sustain");
+    adsrNames.insert("release");
+    
+    params.addParameterListener("attack", this);
+    params.addParameterListener("decay", this);
+    params.addParameterListener("sustain", this);
+    params.addParameterListener("release", this);
+    
+    attackParam = params.getRawParameterValue("attack");
+    decayParam = params.getRawParameterValue("decay");
+    sustainParam = params.getRawParameterValue("sustain");
+    releaseParam = params.getRawParameterValue("release");
 }
 
 HomunculusAudioProcessor::~HomunculusAudioProcessor()
@@ -53,25 +66,38 @@ HomunculusAudioProcessor::~HomunculusAudioProcessor()
 }
 
 void HomunculusAudioProcessor::parameterChanged (const String& parameterID, float newValue) {
+
     // parse parameter ID
     if (initialized){
-        auto end = parameterID.length();
-        auto ind = std::stoi(parameterID.substring(end-1, end).toStdString())-1;
-        auto type = parameterID.substring(0,end-1).toStdString();
-        
-        HumBPF* selectedBPF = dynamic_cast<HumBPF*>(filters[ind]->getProcessor());
+        if (adsrNames.count(parameterID.toStdString())!=0){            
+            for (auto i = 0; i < NUMBER_OF_VOICES; i++){
+                
 
-        switch(stringValueMap[type]){
-            case eFreq:
-                selectedBPF->setFreq(newValue);
-                break;
-            case eQ:
-                selectedBPF->setQ(newValue);
-                break;
-            case eGain:
-                selectedBPF->setGain(newValue);
-                break;
-        };
+                dynamic_cast<BlitSynthVoice*>(blitSynth.getVoice(i))->setParams(
+                    *attackParam, *decayParam, *sustainParam, *releaseParam
+                );
+            }
+            
+        } else {
+        
+            auto end = parameterID.length();
+            auto ind = std::stoi(parameterID.substring(end-1, end).toStdString())-1;
+            auto type = parameterID.substring(0,end-1).toStdString();
+            
+            HumBPF* selectedBPF = dynamic_cast<HumBPF*>(filters[ind]->getProcessor());
+
+            switch(bpfParameterMap[type]){
+                case eFreq:
+                    selectedBPF->setFreq(newValue);
+                    break;
+                case eQ:
+                    selectedBPF->setQ(newValue);
+                    break;
+                case eGain:
+                    selectedBPF->setGain(newValue);
+                    break;
+            };
+        }
     }
 }
 

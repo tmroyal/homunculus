@@ -81,8 +81,13 @@ private:
     
     AudioProcessorValueTreeState params;
     
-    std::map<std::string,StringValue> stringValueMap;
-
+    std::map<std::string,StringValue> bpfParameterMap;
+    std::unordered_set<std::string> adsrNames;
+    
+    std::atomic<float>* attackParam = nullptr;
+    std::atomic<float>* decayParam = nullptr;
+    std::atomic<float>* sustainParam = nullptr;
+    std::atomic<float>* releaseParam = nullptr;
     
     static AudioProcessorValueTreeState::ParameterLayout createLayout(){
         std::vector<std::unique_ptr<AudioParameterFloat>> newParams;
@@ -95,6 +100,11 @@ private:
             newParams.push_back(std::make_unique<AudioParameterFloat> ("gain"+num, "Gain F"+num, 0.0, 1.0, 0.3));
         }
         
+        newParams.push_back(std::make_unique<AudioParameterFloat>("attack", "Attack",0.01,3.0,0.1));
+        newParams.push_back(std::make_unique<AudioParameterFloat>("decay", "Decay",0.01,3.0,0.3));
+        newParams.push_back(std::make_unique<AudioParameterFloat>("sustain", "Sustain",0.0,1.0,0.9));
+        newParams.push_back(std::make_unique<AudioParameterFloat>("release", "Release",0.01,8.0,0.5));
+
         return { newParams.begin(), newParams.end() };
     }
     

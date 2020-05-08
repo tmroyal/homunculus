@@ -37,5 +37,16 @@ private:
     OwnedArray<Slider> sliders;
     OwnedArray<SliderAttachment> attachments;
     
+    Slider attackSlider;
+    Slider decaySlider;
+    Slider sustainSlider;
+    Slider releaseSlider;
+    
+    std::unique_ptr<SliderAttachment> attackAttachment;
+    std::unique_ptr<SliderAttachment> decayAttachment;
+    std::unique_ptr<SliderAttachment> sustainAttachment;
+    std::unique_ptr<SliderAttachment> releaseAttachment;
+    
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HomunculusAudioProcessorEditor)
 };

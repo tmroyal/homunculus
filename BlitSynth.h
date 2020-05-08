@@ -27,14 +27,10 @@ public:
 class BlitSynthVoice : public SynthesiserVoice {
 public:
     BlitSynthVoice(){
-        ADSR::Parameters params;
-        params.attack = 1.0;
-        params.decay = 0.5;
-        params.sustain = 0.8;
-        params.release = 3.0;
+       
         
         envelope.setSampleRate(getSampleRate());
-        envelope.setParameters(params);
+        setParams(0.1, 0.2, 0.5, 0.5);
         
     }
     
@@ -104,9 +100,18 @@ public:
                 ++startSample;
             }
         }
-        
     }
+    
+    void setParams(float attack, float decay, float sustain, float release){
+        ADSR::Parameters params;
+        params.attack = attack;
+        params.decay = decay;
+        params.sustain = sustain;
+        params.release = release;
+        
+        envelope.setParameters(params);
 
+    }
     
 private:
     double currentAngle = 0.0, angleDelta = 0.0, level=0.0;
