@@ -79,7 +79,6 @@ void HomunculusAudioProcessor::parameterChanged (const String& parameterID, floa
             }
             
         } else {
-        
             auto end = parameterID.length();
             auto ind = std::stoi(parameterID.substring(end-1, end).toStdString())-1;
             auto type = parameterID.substring(0,end-1).toStdString();

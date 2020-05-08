@@ -27,7 +27,6 @@ public:
 class BlitSynthVoice : public SynthesiserVoice {
 public:
     BlitSynthVoice(){
-       
         
         envelope.setSampleRate(getSampleRate());
         setParams(0.1, 0.2, 0.5, 0.5);
