@@ -95,9 +95,12 @@ private:
         for (int i = 0; i < NUMBER_OF_FORMANTS; ++i){
             std::string num = std::to_string(i + 1);
             
-            newParams.push_back(std::make_unique<AudioParameterFloat> ("freq"+num, "Freq F"+num, 20.0, 20000, 440));
+        
+            newParams.push_back(std::make_unique<AudioParameterFloat> (
+                               "freq"+num, "Freq F"+num, NormalisableRange<float>(20.0,20000, 0.1, 0.5),197));
             newParams.push_back(std::make_unique<AudioParameterFloat> ("Q"+num, "Q F"+num, 0.01, 10.0, 1.0));
-            newParams.push_back(std::make_unique<AudioParameterFloat> ("gain"+num, "Gain F"+num, 0.0, 1.0, 0.3));
+            newParams.push_back(std::make_unique<AudioParameterFloat> (
+                               "gain"+num, "Gain F"+num, NormalisableRange<float>(0.0,1.0,0.1,0.5), 0.3));
         }
         
         newParams.push_back(std::make_unique<AudioParameterFloat>("attack", "Attack",0.01,3.0,0.1));
