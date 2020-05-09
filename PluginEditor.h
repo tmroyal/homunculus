@@ -35,7 +35,6 @@ private:
     AudioProcessorValueTreeState& params;
     
     OwnedArray<Slider> sliders;
-    OwnedArray<SliderAttachment> attachments;
     
     Slider attackSlider;
     Slider decaySlider;

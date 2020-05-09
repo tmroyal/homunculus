@@ -32,11 +32,7 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         addAndMakeVisible(QSlider);
         addAndMakeVisible(gainSlider);
         
-        attachments.add(new SliderAttachment(params, "freq"+num, *freqSlider));
-        attachments.add(new SliderAttachment(params, "Q"+num, *QSlider));
-        attachments.add(new SliderAttachment(params, "gain"+num, *gainSlider));
     }
-    
     
     addAndMakeVisible(attackSlider);
     addAndMakeVisible(decaySlider);
