@@ -17,6 +17,7 @@
 #include "HumBPF.h"
 #include "FormantManager.h"
 
+
 //==============================================================================
 
 enum StringValue{
@@ -79,7 +80,6 @@ public:
 private:
     void setEnvelope();
     void setEditEnabled(float newValue);
-    
     
     std::unique_ptr<AudioProcessorGraph> filterBankGraph;
     Node::Ptr filterBankInputNode;

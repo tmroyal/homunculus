@@ -55,6 +55,10 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     
     editModeButtonAttachment.reset(new ButtonAttachment(params, "editMode", editModeButton));
     
+    addAndMakeVisible(formantEditorSlider);
+    addAndMakeVisible(formantInterpolatorSlider);
+    formantInterpolatorSlider.setEnabled(false);
+    
     resized();
 
 }
@@ -91,5 +95,8 @@ void HomunculusAudioProcessorEditor::resized()
     releaseSlider.setBounds(10, envTop+90, getWidth()-10, 20);
     
     editModeButton.setBounds(10, envTop+120, getWidth()-10, 20);
+    
+    formantEditorSlider.setBounds(10, envTop+150, getWidth()-10, 20);
+    formantInterpolatorSlider.setBounds(10, envTop+180, getWidth()-10, 20);
     
 }

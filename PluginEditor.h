@@ -48,6 +48,7 @@ private:
     std::unique_ptr<SliderAttachment> formantEditorSliderAttachment;
     std::unique_ptr<SliderAttachment> formantInterpolatorSliderAttachment;
     std::unique_ptr<ButtonAttachment> editModeButtonAttachment;
+
     
     std::unique_ptr<SliderAttachment> attackAttachment;
     std::unique_ptr<SliderAttachment> decayAttachment;
