@@ -41,6 +41,18 @@ public:
         }
     }
     
+    void setFreq(int formantNumber, float freq){
+        formants[formantNumber].freq = freq;
+    }
+    
+    void setQ(int formantNumber, float Q){
+        formants[formantNumber].Q = Q;
+    }
+    
+    void setGain(int formantNumber, float gain){
+        formants[formantNumber].gain = gain;
+    }
+    
     void setParameter(int formantNumber, std::string parameterName, float value){
         // set a parameter of the formant in question, parsing the formant set
         if (parameterName == "freq"){
@@ -82,6 +94,18 @@ public:
     
     void setParameter(int formantNumber, std::string parameterName, float value){
         formantSets[currentFormantSet].setParameter(formantNumber, parameterName, value);
+    }
+    
+    void setFreq(int formantNumber, float freq){
+        formantSets[currentFormantSet].setFreq(formantNumber, freq);
+    }
+    
+    void setQ(int formantNumber, float Q){
+        formantSets[currentFormantSet].setQ(formantNumber, Q);
+    }
+    
+    void setGain(int formantNumber, float gain){
+        formantSets[currentFormantSet].setGain(formantNumber, gain);
     }
     
     void addFormant(bool setCurrentFormantToLast = true){

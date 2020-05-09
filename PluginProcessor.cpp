@@ -63,15 +63,20 @@ void HomunculusAudioProcessor::parameterChanged (const String& parameterID, floa
 }
 
 void HomunculusAudioProcessor::setFrequency(int formant, float freq){
-    DBG(freq);
+    formantManager.setFreq(formant, freq);
+    dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setFreq(freq);
 }
 
 void HomunculusAudioProcessor::setQ(int formant, float Q){
-    DBG(Q);
+    formantManager.setQ(formant, Q);
+    dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setQ(Q);
+
 }
 
 void HomunculusAudioProcessor::setGain(int formant, float gain){
-    DBG(gain);
+    formantManager.setGain(formant, gain);
+    dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setGain(gain);
+
 }
 
 //==============================================================================
