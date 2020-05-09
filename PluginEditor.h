@@ -20,7 +20,8 @@
 class HomunculusAudioProcessorEditor  : public AudioProcessorEditor
 {
     typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
-    
+    typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
+
 public:
     HomunculusAudioProcessorEditor (HomunculusAudioProcessor&, AudioProcessorValueTreeState&);
     ~HomunculusAudioProcessorEditor();
@@ -30,8 +31,6 @@ public:
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
     HomunculusAudioProcessor& processor;
     AudioProcessorValueTreeState& params;
     
@@ -45,6 +44,10 @@ private:
     Slider formantEditorSlider;
     Slider formantInterpolatorSlider;
     ToggleButton editModeButton;
+    
+    std::unique_ptr<SliderAttachment> formantEditorSliderAttachment;
+    std::unique_ptr<SliderAttachment> formantInterpolatorSliderAttachment;
+    std::unique_ptr<ButtonAttachment> editModeButtonAttachment;
     
     std::unique_ptr<SliderAttachment> attackAttachment;
     std::unique_ptr<SliderAttachment> decayAttachment;

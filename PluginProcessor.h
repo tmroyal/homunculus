@@ -77,6 +77,9 @@ public:
     void setGain(int formant, float gain);
     
 private:
+    void setEnvelope();
+    void setEditEnabled(float newValue);
+    
     
     std::unique_ptr<AudioProcessorGraph> filterBankGraph;
     Node::Ptr filterBankInputNode;
@@ -98,13 +101,15 @@ private:
     bool initialized = false;
     
     static AudioProcessorValueTreeState::ParameterLayout createLayout(){
-        std::vector<std::unique_ptr<AudioParameterFloat>> newParams;
+        std::vector<std::unique_ptr<RangedAudioParameter>> newParams;
         
         newParams.push_back(std::make_unique<AudioParameterFloat>("attack", "Attack",0.01,3.0,0.1));
         newParams.push_back(std::make_unique<AudioParameterFloat>("decay", "Decay",0.01,3.0,0.3));
         newParams.push_back(std::make_unique<AudioParameterFloat>("sustain", "Sustain",0.0,1.0,0.9));
         newParams.push_back(std::make_unique<AudioParameterFloat>("release", "Release",0.01,8.0,0.5));
 
+        newParams.push_back(std::make_unique<AudioParameterBool>("editMode", "Edit Mode", true));
+        
         return { newParams.begin(), newParams.end() };
     }
     

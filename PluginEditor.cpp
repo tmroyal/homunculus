@@ -26,8 +26,6 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         auto* QSlider = sliders.add(new Slider());
         auto* gainSlider = sliders.add(new Slider());
         
-        std::cout<< sliders.size() << "\n";
-        
         addAndMakeVisible(freqSlider);
         addAndMakeVisible(QSlider);
         addAndMakeVisible(gainSlider);
@@ -53,6 +51,10 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     sustainAttachment.reset(new SliderAttachment(params, "sustain", sustainSlider));
     releaseAttachment.reset(new SliderAttachment(params, "release", releaseSlider));
 
+    addAndMakeVisible(editModeButton);
+    
+    editModeButtonAttachment.reset(new ButtonAttachment(params, "editMode", editModeButton));
+    
     resized();
 
 }
@@ -87,5 +89,7 @@ void HomunculusAudioProcessorEditor::resized()
     decaySlider.setBounds(10, envTop+30, getWidth()-10, 20);
     sustainSlider.setBounds(10, envTop+60, getWidth()-10, 20);
     releaseSlider.setBounds(10, envTop+90, getWidth()-10, 20);
+    
+    editModeButton.setBounds(10, envTop+120, getWidth()-10, 20);
     
 }

@@ -41,11 +41,15 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
     params.addParameterListener("decay", this);
     params.addParameterListener("sustain", this);
     params.addParameterListener("release", this);
-    
+    params.addParameterListener("editMode", this);
+
     attackParam = params.getRawParameterValue("attack");
     decayParam = params.getRawParameterValue("decay");
     sustainParam = params.getRawParameterValue("sustain");
     releaseParam = params.getRawParameterValue("release");
+
+    setEnvelope();
+    setEditEnabled(*params.getRawParameterValue("editMode"));
 }
 
 HomunculusAudioProcessor::~HomunculusAudioProcessor()
@@ -54,11 +58,23 @@ HomunculusAudioProcessor::~HomunculusAudioProcessor()
 
 void HomunculusAudioProcessor::parameterChanged (const String& parameterID, float newValue) {
     if (initialized){
-        for (auto i = 0; i < NUMBER_OF_VOICES; i++){
-            dynamic_cast<BlitSynthVoice*>(blitSynth.getVoice(i))->setParams(
-                *attackParam, *decayParam, *sustainParam, *releaseParam
-            );
+        if (parameterID == "editMode"){
+            setEditEnabled(newValue);
+        } else {
+            setEnvelope();
         }
+    }
+}
+
+void HomunculusAudioProcessor::setEditEnabled(float newValue){
+    DBG(newValue);
+};
+
+void HomunculusAudioProcessor::setEnvelope(){
+    for (auto i = 0; i < NUMBER_OF_VOICES; i++){
+        dynamic_cast<BlitSynthVoice*>(blitSynth.getVoice(i))->setParams(
+                                                                        *attackParam, *decayParam, *sustainParam, *releaseParam
+                                                                        );
     }
 }
 
@@ -70,13 +86,11 @@ void HomunculusAudioProcessor::setFrequency(int formant, float freq){
 void HomunculusAudioProcessor::setQ(int formant, float Q){
     formantManager.setQ(formant, Q);
     dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setQ(Q);
-
 }
 
 void HomunculusAudioProcessor::setGain(int formant, float gain){
     formantManager.setGain(formant, gain);
     dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setGain(gain);
-
 }
 
 //==============================================================================
