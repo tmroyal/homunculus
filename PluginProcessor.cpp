@@ -267,6 +267,13 @@ void HomunculusAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
     auto state = params.copyState();
     std::unique_ptr<XmlElement> xml (state.createXml());
+    
+    xml->createNewChildElement("formantData");
+    
+    DBG(xml->toString());
+    
+    
+    // formantManager.getState(xml);
     copyXmlToBinary (*xml, destData);
    
 }
@@ -274,6 +281,9 @@ void HomunculusAudioProcessor::getStateInformation (MemoryBlock& destData)
 void HomunculusAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     std::unique_ptr<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
+    
+    DBG(xmlState->toString());
+
     
     if (xmlState.get() != nullptr)
         if (xmlState->hasTagName (params.state.getType()))

@@ -42,11 +42,14 @@ private:
     Slider sustainSlider;
     Slider releaseSlider;
     
+    Slider formantEditorSlider;
+    Slider formantInterpolatorSlider;
+    ToggleButton editModeButton;
+    
     std::unique_ptr<SliderAttachment> attackAttachment;
     std::unique_ptr<SliderAttachment> decayAttachment;
     std::unique_ptr<SliderAttachment> sustainAttachment;
     std::unique_ptr<SliderAttachment> releaseAttachment;
-    
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HomunculusAudioProcessorEditor)
 };
