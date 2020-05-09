@@ -39,6 +39,10 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         gainSlider->onValueChange = [this, i, gainSlider]{
             processor.setGain(i, gainSlider->getValue());
         };
+        
+        freqSlider->setEnabled(!processor.getEditMode());
+        QSlider->setEnabled(!processor.getEditMode());
+        gainSlider->setEnabled(!processor.getEditMode());
     }
     
     addAndMakeVisible(attackSlider);
@@ -65,6 +69,10 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     editModeButton.onClick = [this]{
         formantInterpolatorSlider.setEnabled(processor.getEditMode());
         formantEditorSlider.setEnabled(!processor.getEditMode());
+        
+        for (auto i = sliders.begin(); i != sliders.end(); i++){
+            (*i)->setEnabled(!processor.getEditMode());
+        }
     };
     
     resized();
