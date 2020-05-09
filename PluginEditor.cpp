@@ -12,8 +12,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioProcessor& p, AudioProcessorValueTreeState& ps)
-    : AudioProcessorEditor (&p), processor (p), params(ps)
+HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioProcessor& p, AudioProcessorValueTreeState& ps, FormantManager& fm)
+    : AudioProcessorEditor (&p), processor (p), params(ps), formantManager(fm)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -31,6 +31,17 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         addAndMakeVisible(freqSlider);
         addAndMakeVisible(QSlider);
         addAndMakeVisible(gainSlider);
+        
+        freqSlider->onValueChange = [this, i, freqSlider]{
+            formantManager.setParameter(i, "freq", freqSlider->getValue());
+        };
+        QSlider->onValueChange = [this, i, QSlider]{
+            formantManager.setParameter(i, "Q", QSlider->getValue());
+        };
+        gainSlider->onValueChange = [this, i, gainSlider]{
+            formantManager.setParameter(i, "gain", gainSlider->getValue());
+        };
+        
         
     }
     

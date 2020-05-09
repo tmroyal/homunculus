@@ -80,7 +80,7 @@ public:
         formantSets.push_back(FormantSet());
     }
     
-    void setParameter(int formantNumber, std::string& parameterName, float value){
+    void setParameter(int formantNumber, std::string parameterName, float value){
         formantSets[currentFormantSet].setParameter(formantNumber, parameterName, value);
     }
     

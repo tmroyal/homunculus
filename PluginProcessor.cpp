@@ -66,36 +66,11 @@ HomunculusAudioProcessor::~HomunculusAudioProcessor()
 }
 
 void HomunculusAudioProcessor::parameterChanged (const String& parameterID, float newValue) {
-
-    // parse parameter ID
     if (initialized){
-        if (adsrNames.count(parameterID.toStdString())!=0){            
-            for (auto i = 0; i < NUMBER_OF_VOICES; i++){
-                
-
-                dynamic_cast<BlitSynthVoice*>(blitSynth.getVoice(i))->setParams(
-                    *attackParam, *decayParam, *sustainParam, *releaseParam
-                );
-            }
-            
-        } else {
-            auto end = parameterID.length();
-            auto ind = std::stoi(parameterID.substring(end-1, end).toStdString())-1;
-            auto type = parameterID.substring(0,end-1).toStdString();
-            
-            HumBPF* selectedBPF = dynamic_cast<HumBPF*>(filters[ind]->getProcessor());
-
-            switch(bpfParameterMap[type]){
-                case eFreq:
-                    selectedBPF->setFreq(newValue);
-                    break;
-                case eQ:
-                    selectedBPF->setQ(newValue);
-                    break;
-                case eGain:
-                    selectedBPF->setGain(newValue);
-                    break;
-            };
+        for (auto i = 0; i < NUMBER_OF_VOICES; i++){
+            dynamic_cast<BlitSynthVoice*>(blitSynth.getVoice(i))->setParams(
+                *attackParam, *decayParam, *sustainParam, *releaseParam
+            );
         }
     }
 }
@@ -259,7 +234,7 @@ bool HomunculusAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* HomunculusAudioProcessor::createEditor()
 {
-    return new HomunculusAudioProcessorEditor (*this, params);
+    return new HomunculusAudioProcessorEditor (*this, params, formantManager);
 }
 
 //==============================================================================
@@ -268,9 +243,9 @@ void HomunculusAudioProcessor::getStateInformation (MemoryBlock& destData)
     auto state = params.copyState();
     std::unique_ptr<XmlElement> xml (state.createXml());
     
-    xml->createNewChildElement("formantData");
-    
-    DBG(xml->toString());
+    //xml->createNewChildElement("formantData");
+    //TODO: only one
+    //DBG(xml->toString());
     
     
     // formantManager.getState(xml);
@@ -282,7 +257,7 @@ void HomunculusAudioProcessor::setStateInformation (const void* data, int sizeIn
 {
     std::unique_ptr<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
     
-    DBG(xmlState->toString());
+    //DBG(xmlState->toString());
 
     
     if (xmlState.get() != nullptr)
