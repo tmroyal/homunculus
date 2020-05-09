@@ -77,9 +77,11 @@ public:
     void setQ(int formant, float Q);
     void setGain(int formant, float gain);
     
+    bool getEditMode();
+    
 private:
+    
     void setEnvelope();
-    void setEditEnabled(float newValue);
     
     std::unique_ptr<AudioProcessorGraph> filterBankGraph;
     Node::Ptr filterBankInputNode;

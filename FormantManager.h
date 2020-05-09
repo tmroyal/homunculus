@@ -143,4 +143,6 @@ public:
 private:
     int currentFormantSet = 0;
     std::vector<FormantSet> formantSets;
+    
+    // valueTree?
 };

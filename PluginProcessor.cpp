@@ -41,7 +41,6 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
     params.addParameterListener("decay", this);
     params.addParameterListener("sustain", this);
     params.addParameterListener("release", this);
-    params.addParameterListener("editMode", this);
 
     attackParam = params.getRawParameterValue("attack");
     decayParam = params.getRawParameterValue("decay");
@@ -49,26 +48,23 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
     releaseParam = params.getRawParameterValue("release");
 
     setEnvelope();
-    setEditEnabled(*params.getRawParameterValue("editMode"));
 }
 
 HomunculusAudioProcessor::~HomunculusAudioProcessor()
 {
 }
 
+bool HomunculusAudioProcessor::getEditMode(){
+    DBG("getEditMode");
+    return *params.getRawParameterValue("editMode");
+}
+
 void HomunculusAudioProcessor::parameterChanged (const String& parameterID, float newValue) {
     if (initialized){
-        if (parameterID == "editMode"){
-            setEditEnabled(newValue);
-        } else {
-            setEnvelope();
-        }
+        setEnvelope();
     }
 }
 
-void HomunculusAudioProcessor::setEditEnabled(float newValue){
-    DBG(newValue);
-};
 
 void HomunculusAudioProcessor::setEnvelope(){
     for (auto i = 0; i < NUMBER_OF_VOICES; i++){

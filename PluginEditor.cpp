@@ -54,13 +54,20 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     addAndMakeVisible(editModeButton);
     
     editModeButtonAttachment.reset(new ButtonAttachment(params, "editMode", editModeButton));
+
     
     addAndMakeVisible(formantEditorSlider);
     addAndMakeVisible(formantInterpolatorSlider);
-    formantInterpolatorSlider.setEnabled(false);
+    
+    formantInterpolatorSlider.setEnabled(processor.getEditMode());
+    formantEditorSlider.setEnabled(!processor.getEditMode());
+    
+    editModeButton.onClick = [this]{
+        formantInterpolatorSlider.setEnabled(processor.getEditMode());
+        formantEditorSlider.setEnabled(!processor.getEditMode());
+    };
     
     resized();
-
 }
 
 HomunculusAudioProcessorEditor::~HomunculusAudioProcessorEditor()
