@@ -53,17 +53,6 @@ public:
         formants[formantNumber].gain = gain;
     }
     
-    void setParameter(int formantNumber, std::string parameterName, float value){
-        // set a parameter of the formant in question, parsing the formant set
-        if (parameterName == "freq"){
-            formants[formantNumber].freq = value;
-        } else if (parameterName == "Q"){
-            formants[formantNumber].Q = value;
-        } else if (parameterName == "gain"){
-            formants[formantNumber].gain = value;
-        }
-    }
-    
     static FormantSet interpolate(FormantSet a, FormantSet b, float t){
         FormantSet fs;
         
@@ -91,11 +80,7 @@ public:
     FormantManager(){
         formantSets.push_back(FormantSet());
     }
-    
-    void setParameter(int formantNumber, std::string parameterName, float value){
-        formantSets[currentFormantSet].setParameter(formantNumber, parameterName, value);
-    }
-    
+
     void setFreq(int formantNumber, float freq){
         formantSets[currentFormantSet].setFreq(formantNumber, freq);
     }
