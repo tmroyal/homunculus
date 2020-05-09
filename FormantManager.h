@@ -19,17 +19,11 @@ class Formant {
 public:
     Formant(){}
     
-    Formant(const Formant& formant){
-        freq = formant.freq;
-        Q = formant.Q;
-        gain = formant.gain;
-    }
-    
-    Formant interpolate( Formant b, float t){
+    static Formant interpolate(Formant a, Formant b, float t){
         Formant interpolated;
-        interpolated.freq =  freq*(t-1)+b.freq*t;
-        interpolated.Q =  Q*(t-1)+b.Q*t;
-        interpolated.gain =  gain*(t-1)+b.gain*t;
+        interpolated.freq =  a.freq*(t-1)+b.freq*t;
+        interpolated.Q =  a.Q*(t-1)+b.Q*t;
+        interpolated.gain =  a.gain*(t-1)+b.gain*t;
         
         return interpolated;
     }
@@ -43,15 +37,7 @@ class FormantSet {
 public:
     FormantSet(){
         for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
-            Formant f;
-            formants.push_back(f);
-        }
-    }
-    
-    FormantSet(const FormantSet& fs){
-        for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
-            Formant f(getFormant(i));
-            formants.push_back(f);
+            formants.push_back(Formant());
         }
     }
     
@@ -70,7 +56,7 @@ public:
         FormantSet fs;
         
         for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
-            Formant interpolatedFormant = a.getFormant(i).interpolate(b.getFormant(i), t);
+            Formant interpolatedFormant = Formant::interpolate(a.getFormant(i), b.getFormant(i), t);
             fs.setFormant( i, interpolatedFormant);
         }
         
@@ -91,8 +77,7 @@ public:
 class FormantManager{
 public:
     FormantManager(){
-        FormantSet fs;
-        formantSets.push_back(fs);
+        formantSets.push_back(FormantSet());
     }
     
     void setParameter(int formantNumber, std::string& parameterName, float value){
