@@ -15,9 +15,9 @@
 #include <vector>
 #include "BlitSynth.h"
 #include "HumBPF.h"
+#include "FormantManager.h"
+
 //==============================================================================
-/**
-*/
 
 enum StringValue{
     eFreq,
@@ -89,6 +89,10 @@ private:
     std::atomic<float>* sustainParam = nullptr;
     std::atomic<float>* releaseParam = nullptr;
     
+    FormantManager formantManager;
+
+    bool initialized = false;
+    
     static AudioProcessorValueTreeState::ParameterLayout createLayout(){
         std::vector<std::unique_ptr<AudioParameterFloat>> newParams;
         
@@ -110,8 +114,6 @@ private:
 
         return { newParams.begin(), newParams.end() };
     }
-    
-    bool initialized = false;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HomunculusAudioProcessor)
