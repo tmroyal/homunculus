@@ -32,19 +32,6 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
     
     blitSynth.addSound (new BlitSynthSound());
     
-    
-    // parameter listeners
-    for (auto i = 0; i < NUMBER_OF_FORMANTS; i++){
-        std::string num = std::to_string(i+1);
-        params.addParameterListener("freq"+num, this);
-        params.addParameterListener("Q"+num, this);
-        params.addParameterListener("gain"+num, this);
-    }
-    
-    bpfParameterMap["freq"] = eFreq;
-    bpfParameterMap["Q"] = eQ;
-    bpfParameterMap["gain"] = eGain;
-    
     adsrNames.insert("attack");
     adsrNames.insert("decay");
     adsrNames.insert("sustain");
@@ -73,6 +60,18 @@ void HomunculusAudioProcessor::parameterChanged (const String& parameterID, floa
             );
         }
     }
+}
+
+void HomunculusAudioProcessor::setFrequency(int formant, float freq){
+    DBG(freq);
+}
+
+void HomunculusAudioProcessor::setQ(int formant, float Q){
+    DBG(Q);
+}
+
+void HomunculusAudioProcessor::setGain(int formant, float gain){
+    DBG(gain);
 }
 
 //==============================================================================
@@ -234,7 +233,7 @@ bool HomunculusAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* HomunculusAudioProcessor::createEditor()
 {
-    return new HomunculusAudioProcessorEditor (*this, params, formantManager);
+    return new HomunculusAudioProcessorEditor (*this, params);
 }
 
 //==============================================================================

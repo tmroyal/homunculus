@@ -12,8 +12,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioProcessor& p, AudioProcessorValueTreeState& ps, FormantManager& fm)
-    : AudioProcessorEditor (&p), processor (p), params(ps), formantManager(fm)
+HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioProcessor& p, AudioProcessorValueTreeState& ps)
+    : AudioProcessorEditor (&p), processor (p), params(ps)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -26,23 +26,21 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         auto* QSlider = sliders.add(new Slider());
         auto* gainSlider = sliders.add(new Slider());
         
-        std::cout<< sliders.size() <<"\n";
+        std::cout<< sliders.size() << "\n";
         
         addAndMakeVisible(freqSlider);
         addAndMakeVisible(QSlider);
         addAndMakeVisible(gainSlider);
         
         freqSlider->onValueChange = [this, i, freqSlider]{
-            formantManager.setParameter(i, "freq", freqSlider->getValue());
+            processor.setFrequency(i, freqSlider->getValue());
         };
         QSlider->onValueChange = [this, i, QSlider]{
-            formantManager.setParameter(i, "Q", QSlider->getValue());
+            processor.setQ(i, QSlider->getValue());
         };
         gainSlider->onValueChange = [this, i, gainSlider]{
-            formantManager.setParameter(i, "gain", gainSlider->getValue());
+            processor.setGain(i, gainSlider->getValue());
         };
-        
-        
     }
     
     addAndMakeVisible(attackSlider);

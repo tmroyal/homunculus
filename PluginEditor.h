@@ -22,7 +22,7 @@ class HomunculusAudioProcessorEditor  : public AudioProcessorEditor
     typedef AudioProcessorValueTreeState::SliderAttachment SliderAttachment;
     
 public:
-    HomunculusAudioProcessorEditor (HomunculusAudioProcessor&, AudioProcessorValueTreeState&, FormantManager&);
+    HomunculusAudioProcessorEditor (HomunculusAudioProcessor&, AudioProcessorValueTreeState&);
     ~HomunculusAudioProcessorEditor();
 
     //==============================================================================
@@ -34,7 +34,6 @@ private:
     // access the processor object that created it.
     HomunculusAudioProcessor& processor;
     AudioProcessorValueTreeState& params;
-    FormantManager& formantManager;
     
     OwnedArray<Slider> sliders;
     
