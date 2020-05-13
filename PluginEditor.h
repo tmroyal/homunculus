@@ -23,7 +23,7 @@ class HomunculusAudioProcessorEditor  : public AudioProcessorEditor
     typedef AudioProcessorValueTreeState::ButtonAttachment ButtonAttachment;
 
 public:
-    HomunculusAudioProcessorEditor (HomunculusAudioProcessor&, AudioProcessorValueTreeState&);
+    HomunculusAudioProcessorEditor (HomunculusAudioProcessor&, AudioProcessorValueTreeState&, FormantManager&);
     ~HomunculusAudioProcessorEditor();
 
     //==============================================================================
@@ -36,6 +36,8 @@ private:
     
     OwnedArray<Slider> sliders;
     
+    FormantManager formantManager;
+    
     Slider attackSlider;
     Slider decaySlider;
     Slider sustainSlider;
@@ -44,12 +46,9 @@ private:
     Slider formantEditorSlider;
     Slider formantInterpolatorSlider;
     ToggleButton editModeButton;
+    
     std::unique_ptr<ButtonAttachment> editModeButtonAttachment;
 
-    
-    std::unique_ptr<SliderAttachment> formantEditorSliderAttachment;
-    std::unique_ptr<SliderAttachment> formantInterpolatorSliderAttachment;
-    
     std::unique_ptr<SliderAttachment> attackAttachment;
     std::unique_ptr<SliderAttachment> decayAttachment;
     std::unique_ptr<SliderAttachment> sustainAttachment;

@@ -46,8 +46,9 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
     decayParam = params.getRawParameterValue("decay");
     sustainParam = params.getRawParameterValue("sustain");
     releaseParam = params.getRawParameterValue("release");
-
+    
     setEnvelope();
+    
 }
 
 HomunculusAudioProcessor::~HomunculusAudioProcessor()
@@ -55,16 +56,23 @@ HomunculusAudioProcessor::~HomunculusAudioProcessor()
 }
 
 bool HomunculusAudioProcessor::getEditMode(){
-    DBG("getEditMode");
     return *params.getRawParameterValue("editMode");
 }
 
 void HomunculusAudioProcessor::parameterChanged (const String& parameterID, float newValue) {
     if (initialized){
+        // because only parameter listeners are ads and r
         setEnvelope();
     }
 }
 
+int HomunculusAudioProcessor::getNumFormantSets(){
+    return formantManager.getNumberOfFormantSets();
+}
+
+int HomunculusAudioProcessor::getCurrentFormantSetId(){
+    return formantManager.getCurrentFormantSetId();
+}
 
 void HomunculusAudioProcessor::setEnvelope(){
     for (auto i = 0; i < NUMBER_OF_VOICES; i++){
@@ -75,19 +83,17 @@ void HomunculusAudioProcessor::setEnvelope(){
 }
 
 void HomunculusAudioProcessor::setFrequency(int formant, float freq){
-    formantManager.setFreq(formant, freq);
     dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setFreq(freq);
 }
 
 void HomunculusAudioProcessor::setQ(int formant, float Q){
-    formantManager.setQ(formant, Q);
     dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setQ(Q);
 }
 
 void HomunculusAudioProcessor::setGain(int formant, float gain){
-    formantManager.setGain(formant, gain);
     dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setGain(gain);
 }
+
 
 //==============================================================================
 const String HomunculusAudioProcessor::getName() const
@@ -248,7 +254,7 @@ bool HomunculusAudioProcessor::hasEditor() const
 
 AudioProcessorEditor* HomunculusAudioProcessor::createEditor()
 {
-    return new HomunculusAudioProcessorEditor (*this, params);
+    return new HomunculusAudioProcessorEditor (*this, params, formantManager);
 }
 
 //==============================================================================

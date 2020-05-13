@@ -76,7 +76,9 @@ public:
     void setFrequency(int formant, float freq);
     void setQ(int formant, float Q);
     void setGain(int formant, float gain);
-    
+    int getNumFormantSets();
+    int getCurrentFormantSetId();
+        
     bool getEditMode();
     
 private:
@@ -111,7 +113,7 @@ private:
         newParams.push_back(std::make_unique<AudioParameterFloat>("release", "Release",0.01,8.0,0.5));
 
         newParams.push_back(std::make_unique<AudioParameterBool>("editMode", "Edit Mode", true));
-        
+
         return { newParams.begin(), newParams.end() };
     }
     

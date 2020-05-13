@@ -12,10 +12,11 @@
 
 #include <vector>
 #include "HumConstants.h"
+#include <JuceHeader.h>
 #include <cmath>
 #include <string>
 
-class Formant {
+class Formant  {
 public:
     Formant(){}
     
@@ -75,10 +76,13 @@ public:
     std::vector<Formant> formants;
 };
 
-class FormantManager{
+class FormantManager {
 public:
     FormantManager(){
-        formantSets.push_back(FormantSet());
+        for (int i = 0; i < NUMBER_INITIAL_FORMANT_SETS; i++){
+            formantSets.push_back(FormantSet());
+        }
+        
     }
 
     void setFreq(int formantNumber, float freq){
@@ -140,9 +144,25 @@ public:
         formantSets.push_back(fs);
     }
     
+    int getNumberOfFormantSets(){
+        return (int)formantSets.size();
+    }
+    
+    void setCurrentFormantSet(int formantSet){
+        currentFormantSet = formantSet;
+    }
+    
+    int getCurrentFormantSetId(){
+        return currentFormantSet;
+    }
+    
+    FormantSet getCurrentFormantSet(){
+        return formantSets[currentFormantSet];
+    }
+
+    
 private:
     int currentFormantSet = 0;
     std::vector<FormantSet> formantSets;
     
-    // valueTree?
 };

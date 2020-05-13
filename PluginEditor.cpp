@@ -12,8 +12,8 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioProcessor& p, AudioProcessorValueTreeState& ps)
-    : AudioProcessorEditor (&p), processor (p), params(ps)
+HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioProcessor& p, AudioProcessorValueTreeState& ps, FormantManager& fmgr)
+    : AudioProcessorEditor (&p), processor (p), params(ps), formantManager(fmgr)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -32,12 +32,17 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         
         freqSlider->onValueChange = [this, i, freqSlider]{
             processor.setFrequency(i, freqSlider->getValue());
+            formantManager.setFreq(i, freqSlider->getValue());
         };
+        
         QSlider->onValueChange = [this, i, QSlider]{
             processor.setQ(i, QSlider->getValue());
+            formantManager.setQ(i, QSlider->getValue());
         };
+        
         gainSlider->onValueChange = [this, i, gainSlider]{
             processor.setGain(i, gainSlider->getValue());
+            formantManager.setGain(i, gainSlider->getValue());
         };
         
         freqSlider->setEnabled(!processor.getEditMode());
@@ -59,7 +64,6 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     
     editModeButtonAttachment.reset(new ButtonAttachment(params, "editMode", editModeButton));
 
-    
     addAndMakeVisible(formantEditorSlider);
     addAndMakeVisible(formantInterpolatorSlider);
     
@@ -75,6 +79,29 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         }
     };
     
+    formantInterpolatorSlider.setRange(0,processor.getNumFormantSets()-1);
+    formantEditorSlider.setRange(0,processor.getNumFormantSets()-1,1);
+    formantEditorSlider.setValue(processor.getCurrentFormantSetId());
+    
+    formantEditorSlider.onValueChange = [this]{
+         formantManager.setCurrentFormantSet((int)formantEditorSlider.getValue());
+         FormantSet currentSet = formantManager.getCurrentFormantSet();
+         
+         for (int i = 0; i < NUMBER_OF_FORMANTS ; i++){
+             Formant fmt = currentSet.getFormant(i);
+             sliders[i*3]->setValue(fmt.freq);
+             sliders[i*3+1]->setValue(fmt.Q);
+             sliders[i*3+2]->setValue(fmt.gain);
+
+             processor.setFrequency(i, fmt.freq);
+             processor.setQ(i, fmt.Q);
+             processor.setGain(i, fmt.gain);
+         }
+         
+    };
+    
+    //formantInterpolatorSlider.onValueChange = // a lambda that eventually calls formantManger
+     
     resized();
 }
 
