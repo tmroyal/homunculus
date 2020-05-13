@@ -15,8 +15,8 @@
 HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioProcessor& p, AudioProcessorValueTreeState& ps, FormantManager& fmgr)
     : AudioProcessorEditor (&p), processor (p), params(ps), formantManager(fmgr)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
+    // TODO: break constructor apart
+    
     setSize (400, 600);
     
     for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
@@ -100,7 +100,15 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
          
     };
     
-    //formantInterpolatorSlider.onValueChange = // a lambda that eventually calls formantManger
+    formantInterpolatorSlider.onValueChange = [this]{
+        FormantSet currentSet = formantManager.getInterpolatedFormants(formantInterpolatorSlider.getValue());
+        for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
+            Formant fmt = currentSet.getFormant(i);
+            processor.setFrequency(i, fmt.freq);
+            processor.setGain(i, fmt.gain);
+            processor.setQ(i, fmt.Q);
+        }
+    };
      
     resized();
 }
