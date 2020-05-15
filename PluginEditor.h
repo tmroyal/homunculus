@@ -46,6 +46,8 @@ private:
     Slider formantEditorSlider;
     Slider formantInterpolatorSlider;
     ToggleButton editModeButton;
+        
+    TextButton addFormantButton;
     
     std::unique_ptr<ButtonAttachment> editModeButtonAttachment;
 

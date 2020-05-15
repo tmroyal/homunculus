@@ -109,6 +109,15 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
             processor.setQ(i, fmt.Q);
         }
     };
+    
+    addAndMakeVisible(addFormantButton);
+    addFormantButton.setButtonText("+");
+    addFormantButton.onClick = [this]{
+        formantManager.addFormant();
+        formantEditorSlider.setRange(0,formantManager.getNumberOfFormantSets()-1,1.0);
+        formantEditorSlider.repaint();
+    };
+    
      
     resized();
 }
@@ -144,7 +153,8 @@ void HomunculusAudioProcessorEditor::resized()
     sustainSlider.setBounds(10, envTop+60, getWidth()-10, 20);
     releaseSlider.setBounds(10, envTop+90, getWidth()-10, 20);
     
-    editModeButton.setBounds(10, envTop+120, getWidth()-10, 20);
+    editModeButton.setBounds(10, envTop+120, (getWidth()-10)/2, 20);
+    addFormantButton.setBounds(getWidth()/2, envTop+120, (getWidth()-10)/2, 20);
     
     formantEditorSlider.setBounds(10, envTop+150, getWidth()-10, 20);
     formantInterpolatorSlider.setBounds(10, envTop+180, getWidth()-10, 20);
