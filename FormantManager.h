@@ -97,7 +97,7 @@ public:
         formantSets[currentFormantSet].setGain(formantNumber, gain);
     }
     
-    void addFormant(bool setCurrentFormantToLast = false){
+    void addFormant(bool setCurrentFormantToLast = true){
         auto last = formantSets.size()-1;
         FormantSet fs(formantSets[last]);
         formantSets.push_back(fs);
