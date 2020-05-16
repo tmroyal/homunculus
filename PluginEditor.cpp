@@ -45,8 +45,13 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
             formantManager.setGain(i, gainSlider->getValue());
         };
         
+        freqSlider->setNormalisableRange(NormalisableRange<double>(20,20000,0,0.4));
         freqSlider->setEnabled(!processor.getEditMode());
+        
+        QSlider->setNormalisableRange(NormalisableRange<double>(0.5,20,0,0.8));
         QSlider->setEnabled(!processor.getEditMode());
+        
+        gainSlider->setNormalisableRange(NormalisableRange<double>(0.0,1.0,0,0.7));
         gainSlider->setEnabled(!processor.getEditMode());
     }
     
