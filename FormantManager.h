@@ -22,9 +22,9 @@ public:
     
     static Formant interpolate(Formant a, Formant b, float t){
         Formant interpolated;
-        interpolated.freq =  a.freq*(t-1)+b.freq*t;
-        interpolated.Q =  a.Q*(t-1)+b.Q*t;
-        interpolated.gain =  a.gain*(t-1)+b.gain*t;
+        interpolated.freq =  a.freq*(1-t)+b.freq*t;
+        interpolated.Q =  a.Q*(1-t)+b.Q*t;
+        interpolated.gain =  a.gain*(1-t)+b.gain*t;
         
         return interpolated;
     }
@@ -60,6 +60,7 @@ public:
         for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
             Formant interpolatedFormant = Formant::interpolate(a.getFormant(i), b.getFormant(i), t);
             fs.setFormant( i, interpolatedFormant);
+            DBG(interpolatedFormant.freq);
         }
         
         return fs;
@@ -119,7 +120,7 @@ public:
     FormantSet getInterpolatedFormants(float ind){
         int lastFS = (int)formantSets.size() - 1;
         
-        if (ind > lastFS-1){
+        if (ind > lastFS){
             return formantSets[lastFS];
         }
         
