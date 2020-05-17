@@ -16,6 +16,8 @@
 #include <cmath>
 #include <string>
 
+using namespace std;
+
 class Formant  {
 public:
     Formant(){}
@@ -27,6 +29,14 @@ public:
         interpolated.gain =  a.gain*(1-t)+b.gain*t;
         
         return interpolated;
+    }
+    
+    unique_ptr<XmlElement> toXml(){
+        auto tree = make_unique<XmlElement>("Formant");
+        tree->setAttribute("freq", freq);
+        tree->setAttribute("Q", Q);
+        tree->setAttribute("gain", gain);
+        return tree;
     }
     
     float freq = 440;
@@ -73,6 +83,15 @@ public:
     void setFormant(int i, Formant formant){
         formants[i] = formant;
     }
+    
+    unique_ptr<XmlElement> toXml(){
+        auto tree = make_unique<XmlElement>("FormantSet");
+        for (Formant formant: formants){
+            tree->addChildElement(formant.toXml().release());
+        }
+        return tree;
+    }
+    
 public:
     std::vector<Formant> formants;
 };
@@ -160,7 +179,18 @@ public:
     FormantSet getCurrentFormantSet(){
         return formantSets[currentFormantSet];
     }
-
+    
+    unique_ptr<XmlElement> toXml(){
+        auto tree = make_unique<XmlElement>("FormantSets");
+        for (FormantSet formantSet: formantSets){
+            tree->addChildElement(formantSet.toXml().release());
+        }
+        return tree;
+    }
+    
+    void setFromXml(XmlElement* element){
+        
+    }
     
 private:
     int currentFormantSet = 0;
