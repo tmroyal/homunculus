@@ -271,8 +271,6 @@ void HomunculusAudioProcessor::getStateInformation (MemoryBlock& destData)
         xml->addChildElement(formantManager.toXml().release());
     }
     
-    DBG(xml->toString());
-    
     // copy to settings file
     copyXmlToBinary (*xml, destData);
 }
@@ -282,17 +280,23 @@ void HomunculusAudioProcessor::setStateInformation (const void* data, int sizeIn
     // make xml from data
     std::unique_ptr<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
     
-    DBG(xmlState->toString());
-    
     // set formant manager and interface
-    // fomantManager.setFromXml(
-    // editorSet from xml
+    auto * fsets = xmlState->getChildByName("FormantSets");
     
-    // remove formant sets so not stored in storage
-    auto* fsets = xmlState->getChildByName("FormantSets");
-    xmlState->removeChildElement(fsets, true);
+    if (fsets != nullptr){
+        formantManager.setFromXml(xmlState->getChildByName("FormantSets"));
+        
+        // update editor
+        if (hasEditor()){
+            auto editor = getActiveEditor();
+            //dynamic_cast<*PluginEditor>(editor)->signalFmgrUpdated();
+        }
+        
+        // remove formant sets so not stored in params
+        xmlState->removeChildElement(fsets, true);
+    }
     
-    // set state based on remaining xml
+    // set params based on remaining xml
     if (xmlState.get() != nullptr)
         if (xmlState->hasTagName (params.state.getType()))
             params.replaceState (ValueTree::fromXml (*xmlState));

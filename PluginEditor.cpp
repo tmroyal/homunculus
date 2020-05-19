@@ -45,6 +45,8 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
             formantManager.setGain(i, gainSlider->getValue());
         };
         
+        // TODO: set value from current Formant manager settings
+        
         freqSlider->setNormalisableRange(NormalisableRange<double>(20,20000,0,0.4));
         freqSlider->setEnabled(!processor.getEditMode());
         
