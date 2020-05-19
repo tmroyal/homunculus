@@ -48,7 +48,6 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
     releaseParam = params.getRawParameterValue("release");
     
     setEnvelope();
-    
 }
 
 HomunculusAudioProcessor::~HomunculusAudioProcessor()
@@ -76,9 +75,9 @@ int HomunculusAudioProcessor::getCurrentFormantSetId(){
 
 void HomunculusAudioProcessor::setEnvelope(){
     for (auto i = 0; i < NUMBER_OF_VOICES; i++){
-        dynamic_cast<BlitSynthVoice*>(blitSynth.getVoice(i))->setParams(
-                                                                        *attackParam, *decayParam, *sustainParam, *releaseParam
-                                                                        );
+        dynamic_cast<BlitSynthVoice*>(
+                    blitSynth.getVoice(i))->setParams(*attackParam, *decayParam, *sustainParam, *releaseParam
+                                                      );
     }
 }
 
@@ -260,29 +259,46 @@ AudioProcessorEditor* HomunculusAudioProcessor::createEditor()
 //==============================================================================
 void HomunculusAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
+    // create xml from parameter state
     auto state = params.copyState();
     std::unique_ptr<XmlElement> xml (state.createXml());
     
-    //xml->createNewChildElement("formantData");
-    //TODO: only one
-    //DBG(xml->toString());
+    // append formantManager information
+    auto* fsets = xml->getChildByName("FormantSets");
+    if (fsets != nullptr){
+        xml->replaceChildElement(fsets,formantManager.toXml().release());
+    } else {
+        xml->addChildElement(formantManager.toXml().release());
+    }
     
+    DBG(xml->toString());
     
-    // formantManager.getState(xml);
+    // copy to settings file
     copyXmlToBinary (*xml, destData);
-   
 }
 
 void HomunculusAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
+    // make xml from data
     std::unique_ptr<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
     
-    //DBG(xmlState->toString());
-
+    DBG(xmlState->toString());
     
+    // set formant manager and interface
+    // fomantManager.setFromXml(
+    // editorSet from xml
+    
+    // remove formant sets so not stored in storage
+    auto* fsets = xmlState->getChildByName("FormantSets");
+    xmlState->removeChildElement(fsets, true);
+    
+    // set state based on remaining xml
     if (xmlState.get() != nullptr)
         if (xmlState->hasTagName (params.state.getType()))
             params.replaceState (ValueTree::fromXml (*xmlState));
+    
+    
+    
 }
 
 
