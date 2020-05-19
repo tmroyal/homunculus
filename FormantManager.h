@@ -182,6 +182,9 @@ public:
     
     unique_ptr<XmlElement> toXml(){
         auto tree = make_unique<XmlElement>("FormantSets");
+        
+        tree->setAttribute(Identifier("currentFormantSet"), currentFormantSet);
+        
         for (FormantSet formantSet: formantSets){
             tree->addChildElement(formantSet.toXml().release());
         }
