@@ -270,7 +270,7 @@ void HomunculusAudioProcessor::getStateInformation (MemoryBlock& destData)
     } else {
         xml->addChildElement(formantManager.toXml().release());
     }
-    
+        
     // copy to settings file
     copyXmlToBinary (*xml, destData);
 }

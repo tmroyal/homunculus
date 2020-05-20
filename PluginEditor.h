@@ -36,7 +36,7 @@ private:
     
     OwnedArray<Slider> sliders;
     
-    FormantManager formantManager;
+    FormantManager& formantManager;
     
     Slider attackSlider;
     Slider decaySlider;

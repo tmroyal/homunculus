@@ -22,6 +22,12 @@ class Formant  {
 public:
     Formant(){}
     
+    Formant(XmlElement* xml){
+        freq = xml->getDoubleAttribute("freq", 440.0);
+        Q = xml->getDoubleAttribute("Q", 1.0);
+        gain = xml->getDoubleAttribute("gain", 0.2);
+    }
+    
     static Formant interpolate(Formant a, Formant b, float t){
         Formant interpolated;
         interpolated.freq =  a.freq*(1-t)+b.freq*t;
@@ -41,14 +47,23 @@ public:
     
     float freq = 440;
     float Q = 1.0;
-    float gain = 1.0;
+    float gain = 0.2;
 };
 
 class FormantSet {
 public:
     FormantSet(){
-        for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
-            formants.push_back(Formant());
+        defaultInit();
+    }
+    
+    FormantSet(XmlElement* xml){
+        
+        forEachXmlChildElementWithTagName(*xml, formant, "Formant"){
+            formants.push_back(Formant(formant));
+        }
+        
+        if (formants.size() < NUMBER_OF_FORMANTS){
+            defaultInit();
         }
     }
     
@@ -92,7 +107,15 @@ public:
         return tree;
     }
     
-public:
+private:
+    
+    void defaultInit(){
+        formants.clear();
+        for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
+            formants.push_back(Formant());
+        }
+    }
+    
     std::vector<Formant> formants;
 };
 
@@ -106,6 +129,7 @@ public:
     }
 
     void setFreq(int formantNumber, float freq){
+
         formantSets[currentFormantSet].setFreq(formantNumber, freq);
     }
     
@@ -160,8 +184,9 @@ public:
     
     void reset(){
         formantSets.clear();
-        FormantSet fs;
-        formantSets.push_back(fs);
+        for (int i = 0; i < NUMBER_INITIAL_FORMANT_SETS; i++){
+            formantSets.push_back(FormantSet());
+        }
     }
     
     int getNumberOfFormantSets(){
@@ -183,16 +208,28 @@ public:
     unique_ptr<XmlElement> toXml(){
         auto tree = make_unique<XmlElement>("FormantSets");
         
+        DBG(formantSets[0].getFormant(0).freq);
+        
         tree->setAttribute(Identifier("currentFormantSet"), currentFormantSet);
         
         for (FormantSet formantSet: formantSets){
             tree->addChildElement(formantSet.toXml().release());
         }
+        
         return tree;
     }
     
     void setFromXml(XmlElement* element){
+        formantSets.clear();
+        currentFormantSet = element->getIntAttribute("currentFormantSet",0);
         
+        forEachXmlChildElementWithTagName(*element, formantSetXml, "FormantSet"){
+            formantSets.push_back(FormantSet(formantSetXml));
+        }
+        
+        // ensure there is at least two formant sets. if not, initialize;
+        
+        // iterate over FormantSet children on xml and create Formant sets based off of these settings
     }
     
 private:
