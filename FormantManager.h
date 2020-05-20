@@ -207,9 +207,7 @@ public:
     
     unique_ptr<XmlElement> toXml(){
         auto tree = make_unique<XmlElement>("FormantSets");
-        
-        DBG(formantSets[0].getFormant(0).freq);
-        
+                
         tree->setAttribute(Identifier("currentFormantSet"), currentFormantSet);
         
         for (FormantSet formantSet: formantSets){

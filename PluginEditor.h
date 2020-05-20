@@ -29,6 +29,8 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+    
+    void syncFormantManager();
 
 private:
     HomunculusAudioProcessor& processor;

@@ -93,12 +93,14 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     formantEditorSlider.onValueChange = [this]{
          formantManager.setCurrentFormantSet((int)formantEditorSlider.getValue());
          FormantSet currentSet = formantManager.getCurrentFormantSet();
-         
+        
+        syncFormantManager();
+        
          for (int i = 0; i < NUMBER_OF_FORMANTS ; i++){
              Formant fmt = currentSet.getFormant(i);
-             sliders[i*3]->setValue(fmt.freq);
-             sliders[i*3+1]->setValue(fmt.Q);
-             sliders[i*3+2]->setValue(fmt.gain);
+             //sliders[i*3]->setValue(fmt.freq);
+             //sliders[i*3+1]->setValue(fmt.Q);
+             //sliders[i*3+2]->setValue(fmt.gain);
 
              processor.setFrequency(i, fmt.freq);
              processor.setQ(i, fmt.Q);
@@ -129,7 +131,7 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         formantEditorSlider.setValue((double)formantManager.getCurrentFormantSetId());
     };
     
-     
+    syncFormantManager();
     resized();
 }
 
@@ -170,4 +172,13 @@ void HomunculusAudioProcessorEditor::resized()
     formantEditorSlider.setBounds(10, envTop+150, getWidth()-10, 20);
     formantInterpolatorSlider.setBounds(10, envTop+180, getWidth()-10, 20);
     
+}
+
+void HomunculusAudioProcessorEditor::syncFormantManager(){
+    for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
+        DBG(formantManager.getCurrentFormantSet().getFormant(i).freq);
+        sliders[i*3]->setValue(formantManager.getCurrentFormantSet().getFormant(i).freq);
+        sliders[i*3+1]->setValue(formantManager.getCurrentFormantSet().getFormant(i).Q);
+        sliders[i*3+2]->setValue(formantManager.getCurrentFormantSet().getFormant(i).gain);
+    }
 }

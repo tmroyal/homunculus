@@ -161,7 +161,7 @@ void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     blitSynth.setCurrentPlaybackSampleRate(sampleRate);
     
-    filterBankGraph->setPlayConfigDetails (1,1, sampleRate, samplesPerBlock);
+    filterBankGraph->setPlayConfigDetails (1, 1, sampleRate, samplesPerBlock);
     
     filterBankGraph->prepareToPlay (sampleRate, samplesPerBlock);
     
@@ -172,15 +172,17 @@ void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 
     filters.clear();
     
+    // create three filters and connect them to the audiograph
     for (auto i = 0; i < NUMBER_OF_FORMANTS; i++){
         Node::Ptr newNode = filterBankGraph->addNode(std::make_unique<HumBPF>());
+        Formant fmt = formantManager.getCurrentFormantSet().getFormant(i);
         
         filters.push_back(newNode);
         
         HumBPF* newFilter = dynamic_cast<HumBPF*>(newNode->getProcessor());
-        newFilter->setFreq(440);
-        newFilter->setQ(4);
-        newFilter->setGain(0.2);
+        newFilter->setFreq(fmt.freq);
+        newFilter->setQ(fmt.Q);
+        newFilter->setGain(fmt.gain);
         newFilter->prepareToPlay(sampleRate, samplesPerBlock);
 
         filterBankGraph->addConnection({
@@ -270,7 +272,7 @@ void HomunculusAudioProcessor::getStateInformation (MemoryBlock& destData)
     } else {
         xml->addChildElement(formantManager.toXml().release());
     }
-        
+    
     // copy to settings file
     copyXmlToBinary (*xml, destData);
 }
@@ -286,13 +288,6 @@ void HomunculusAudioProcessor::setStateInformation (const void* data, int sizeIn
     if (fsets != nullptr){
         formantManager.setFromXml(xmlState->getChildByName("FormantSets"));
         
-        // update editor
-        if (hasEditor()){
-            auto editor = getActiveEditor();
-            //dynamic_cast<*PluginEditor>(editor)->signalFmgrUpdated();
-        }
-        
-        // remove formant sets so not stored in params
         xmlState->removeChildElement(fsets, true);
     }
     
@@ -300,8 +295,6 @@ void HomunculusAudioProcessor::setStateInformation (const void* data, int sizeIn
     if (xmlState.get() != nullptr)
         if (xmlState->hasTagName (params.state.getType()))
             params.replaceState (ValueTree::fromXml (*xmlState));
-    
-    
     
 }
 
