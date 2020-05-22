@@ -31,7 +31,7 @@ class BlitSynthVoice : public SynthesiserVoice {
 public:
     BlitSynthVoice(){
         envelope.setSampleRate(getSampleRate());
-        setParams(0.1, 0.2, 0.5, 0.5,6.0,0.2);
+        setParams(0.1, 0.2, 0.5, 0.5,0.0,0.0);
     }
     
     bool canPlaySound(SynthesiserSound* sound) override {
@@ -39,6 +39,10 @@ public:
     }
     
     void startNote ( int midiNoteNumber, float velocity, SynthesiserSound*, int curPitchWheelPos) override {
+        float db = (1-velocity)*-40.0;
+        
+        if (db <= -39.9){ level = 0.0; } else { level = Decibels::decibelsToGain(db); }
+        
         currentAngle = 0.0;
         level = velocity*0.9;
         
