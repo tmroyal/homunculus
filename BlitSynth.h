@@ -5,6 +5,9 @@
     Created: 3 May 2020 11:37:50am
     Author:  Thomas Royal
 
+ 
+    Synth voice that implements a band limited impulse stream with envelope
+ 
   ==============================================================================
 */
 
@@ -68,7 +71,7 @@ public:
     void pitchWheelMoved (int) override      {}
     void controllerMoved (int, int) override {}
     
-    void renderNextBlock (AudioSampleBuffer& outputBuffer, int startSample, int numSamples) override {
+    void renderNextBlock (AudioSampleBuffer& buffer, int startSample, int numSamples) override {
         if (angleDelta != 0.0){
             while (--numSamples >= 0){
                 double currentSample;
@@ -82,8 +85,8 @@ public:
 
                 float envSample = envelope.getNextSample();
                 
-                for (auto i = outputBuffer.getNumChannels(); --i >= 0;){
-                    outputBuffer.addSample(i, startSample, currentSample*envSample);
+                for (auto i = buffer.getNumChannels(); --i >= 0;){
+                    buffer.addSample(i, startSample, currentSample*envSample);
                 }
                 
                 if (tailOff == true && !envelope.isActive()){
@@ -116,6 +119,6 @@ private:
     double currentAngle = 0.0, angleDelta = 0.0, level=0.0;
     bool tailOff = false;
     double m = 1.0;
-    
+        
     ADSR envelope;
 };

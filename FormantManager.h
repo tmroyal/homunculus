@@ -5,6 +5,10 @@
     Created: 8 May 2020 4:07:33pm
     Author:  Thomas Royal
 
+ 
+    Manages storage of multiple formants, defines a formant set, and
+    implements interpolation between formant sets
+ 
   ==============================================================================
 */
 

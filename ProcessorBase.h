@@ -4,6 +4,8 @@
     ProcessorBase.h
     Created: 3 May 2020 4:17:35pm
     Author:  Thomas Royal
+ 
+    A virtual class definine custom written audioProcessors for this app
 
   ==============================================================================
 */
