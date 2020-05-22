@@ -81,7 +81,7 @@ public:
     
 private:
     
-    void setEnvelope();
+    void setSynthParams();
     
     std::unique_ptr<AudioProcessorGraph> filterBankGraph;
     Node::Ptr filterBankInputNode;
@@ -89,15 +89,14 @@ private:
     std::vector<Node::Ptr> filters;
     
     AudioProcessorValueTreeState params;
-    
-    std::map<std::string,StringValue> bpfParameterMap;
-    std::unordered_set<std::string> adsrNames;
-    
+        
     std::atomic<float>* attackParam = nullptr;
     std::atomic<float>* decayParam = nullptr;
     std::atomic<float>* sustainParam = nullptr;
     std::atomic<float>* releaseParam = nullptr;
-    
+    std::atomic<float>* lfoFreqParam = nullptr;
+    std::atomic<float>* lfoAmpParam = nullptr;
+
     FormantManager formantManager;
 
     bool initialized = false;
@@ -111,6 +110,8 @@ private:
         newParams.push_back(std::make_unique<AudioParameterFloat>("release", "Release",0.01,8.0,0.5));
 
         newParams.push_back(std::make_unique<AudioParameterFloat>("interpolate", "Morph Index", 0.0, 1.0, 0.0));
+        newParams.push_back(std::make_unique<AudioParameterFloat>("lfoFreq", "LFO Frequency", 0.0, 20.0, 0.0));
+        newParams.push_back(std::make_unique<AudioParameterFloat>("lfoAmount", "LFO Amount", 0.0, 1.0, 0.0));
         
         return { newParams.begin(), newParams.end() };
     }

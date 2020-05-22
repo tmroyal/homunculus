@@ -32,23 +32,23 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
     
     blitSynth.addSound (new BlitSynthSound());
     
-    adsrNames.insert("attack");
-    adsrNames.insert("decay");
-    adsrNames.insert("sustain");
-    adsrNames.insert("release");
-    
     params.addParameterListener("attack", this);
     params.addParameterListener("decay", this);
     params.addParameterListener("sustain", this);
     params.addParameterListener("release", this);
     params.addParameterListener("interpolate", this);
+    params.addParameterListener("lfoFreq", this);
+    params.addParameterListener("lfoAmount", this);
 
     attackParam = params.getRawParameterValue("attack");
     decayParam = params.getRawParameterValue("decay");
     sustainParam = params.getRawParameterValue("sustain");
     releaseParam = params.getRawParameterValue("release");
-    
-    setEnvelope();
+
+    lfoFreqParam = params.getRawParameterValue("lfoFreq");
+    lfoAmpParam = params.getRawParameterValue("lfoAmount");
+
+    //setSynthParams();
 }
 
 HomunculusAudioProcessor::~HomunculusAudioProcessor()
@@ -66,7 +66,7 @@ void HomunculusAudioProcessor::parameterChanged (const String& parameterID, floa
                 setQ(i, fmt.Q);
             }
         } else {
-            setEnvelope();
+            setSynthParams();
         }
     }
 }
@@ -79,10 +79,11 @@ int HomunculusAudioProcessor::getCurrentFormantSetId(){
     return formantManager.getCurrentFormantSetId();
 }
 
-void HomunculusAudioProcessor::setEnvelope(){
+void HomunculusAudioProcessor::setSynthParams(){
     for (auto i = 0; i < NUMBER_OF_VOICES; i++){
         dynamic_cast<BlitSynthVoice*>(
-                    blitSynth.getVoice(i))->setParams(*attackParam, *decayParam, *sustainParam, *releaseParam
+                    blitSynth.getVoice(i))->setParams(
+                            *attackParam, *decayParam, *sustainParam, *releaseParam, *lfoFreqParam, *lfoAmpParam
                                                       );
     }
 }
@@ -201,9 +202,8 @@ void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
         });
     }
 
-    setEnvelope();
+    setSynthParams();
 
-    
     initialized = true;
 }
 

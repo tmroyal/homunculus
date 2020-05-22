@@ -19,7 +19,7 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
 {
     // TODO: break constructor apart
     
-    setSize (400, 600);
+    setSize (400, 650);
     
     addAndMakeVisible(kbComponent);
     
@@ -72,6 +72,12 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     sustainAttachment.reset(new SliderAttachment(params, "sustain", sustainSlider));
     releaseAttachment.reset(new SliderAttachment(params, "release", releaseSlider));
 
+    addAndMakeVisible(lfoFreqSlider);
+    addAndMakeVisible(lfoAmountSlider);
+    
+    lfoFreqSliderAttachment.reset(new SliderAttachment(params, "lfoFreq", lfoFreqSlider));
+    lfoAmountSliderAttachment.reset(new SliderAttachment(params, "lfoAmount", lfoAmountSlider));
+    
     addAndMakeVisible(editModeButton);
     
     addAndMakeVisible(formantEditorSlider);
@@ -162,6 +168,9 @@ void HomunculusAudioProcessorEditor::resized()
     
     formantEditorSlider.setBounds(10, envTop+150, getWidth()-10, 20);
     formantInterpolatorSlider.setBounds(10, envTop+180, getWidth()-10, 20);
+    
+    lfoFreqSlider.setBounds(10, envTop+210, getWidth()-10, 20);
+    lfoAmountSlider.setBounds(10, envTop+240, getWidth()-10, 20);
     
     kbComponent.setBounds(0, getHeight()-80, getWidth(), 80);
     

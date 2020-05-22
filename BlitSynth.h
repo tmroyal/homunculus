@@ -31,7 +31,7 @@ class BlitSynthVoice : public SynthesiserVoice {
 public:
     BlitSynthVoice(){
         envelope.setSampleRate(getSampleRate());
-        setParams(0.1, 0.2, 0.5, 0.5);
+        setParams(0.1, 0.2, 0.5, 0.5,6.0,0.2);
     }
     
     bool canPlaySound(SynthesiserSound* sound) override {
@@ -111,7 +111,7 @@ public:
         }
     }
     
-    void setParams(float attack, float decay, float sustain, float release){
+    void setParams(float attack, float decay, float sustain, float release, float lfoF, float lfoA){
         ADSR::Parameters params;
         params.attack = attack;
         params.decay = decay;
@@ -119,6 +119,9 @@ public:
         params.release = release;
         
         envelope.setParameters(params);
+        
+        setLFOFreq(lfoF);
+        setLFOAmount(lfoA);
     }
     
 private:

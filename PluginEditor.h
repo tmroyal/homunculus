@@ -47,11 +47,16 @@ private:
     
     Slider formantEditorSlider;
     Slider formantInterpolatorSlider;
+    
+    Slider lfoFreqSlider;
+    Slider lfoAmountSlider;
+    
     ToggleButton editModeButton;
         
     TextButton addFormantButton;
     
-    std::unique_ptr<ButtonAttachment> editModeButtonAttachment;
+    std::unique_ptr<SliderAttachment> lfoFreqSliderAttachment;
+    std::unique_ptr<SliderAttachment> lfoAmountSliderAttachment;
 
     std::unique_ptr<SliderAttachment> formantInterpolatorSliderAttachment;
     std::unique_ptr<SliderAttachment> attackAttachment;
