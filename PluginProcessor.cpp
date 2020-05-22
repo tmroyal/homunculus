@@ -200,6 +200,9 @@ void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
             {newNode->nodeID, 0}, {filterBankOutputNode->nodeID, 0}
         });
     }
+
+    setEnvelope();
+
     
     initialized = true;
 }
