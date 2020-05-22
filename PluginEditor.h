@@ -33,6 +33,8 @@ public:
     void syncFormantManager();
 
 private:
+    MidiKeyboardComponent kbComponent;
+    
     HomunculusAudioProcessor& processor;
     AudioProcessorValueTreeState& params;
     
@@ -61,3 +63,10 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HomunculusAudioProcessorEditor)
 };
+
+/*
+ 1. keyboard in editor
+ 2. keyboard state in processor
+ 3. keyboard state gets called in process
+ 4. keyboard state get cleared in a number of places
+ */

@@ -13,11 +13,17 @@
 
 //==============================================================================
 HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioProcessor& p, AudioProcessorValueTreeState& ps, FormantManager& fmgr)
-    : AudioProcessorEditor (&p), processor (p), params(ps), formantManager(fmgr)
+    : AudioProcessorEditor (&p),
+        kbComponent(p.keyboardState, MidiKeyboardComponent::horizontalKeyboard),
+        processor (p),
+        params(ps),
+        formantManager(fmgr)
 {
     // TODO: break constructor apart
     
     setSize (400, 600);
+    
+    addAndMakeVisible(kbComponent);
     
     for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
         std::string num = std::to_string(i+1);
@@ -162,6 +168,8 @@ void HomunculusAudioProcessorEditor::resized()
     
     formantEditorSlider.setBounds(10, envTop+150, getWidth()-10, 20);
     formantInterpolatorSlider.setBounds(10, envTop+180, getWidth()-10, 20);
+    
+    kbComponent.setBounds(0, getHeight()-80, getWidth(), 80);
     
 }
 

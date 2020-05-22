@@ -165,6 +165,7 @@ void HomunculusAudioProcessor::changeProgramName (int index, const String& newNa
 //==============================================================================
 void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    keyboardState.reset();
     blitSynth.setCurrentPlaybackSampleRate(sampleRate);
     
     filterBankGraph->setPlayConfigDetails (1, 1, sampleRate, samplesPerBlock);
@@ -206,6 +207,7 @@ void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 void HomunculusAudioProcessor::releaseResources()
 {
      filterBankGraph->releaseResources();
+    keyboardState.reset();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -239,6 +241,8 @@ void HomunculusAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuf
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     auto numSamples = buffer.getNumSamples();
 
+    keyboardState.processNextMidiBuffer(midiMessages, 0, numSamples, true);
+    
     // clear inputs
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());

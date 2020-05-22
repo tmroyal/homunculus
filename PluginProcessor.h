@@ -78,7 +78,9 @@ public:
     void setGain(int formant, float gain);
     int getNumFormantSets();
     int getCurrentFormantSetId();
-            
+    
+    MidiKeyboardState keyboardState;
+    
 private:
     
     void setEnvelope();
