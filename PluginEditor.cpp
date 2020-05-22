@@ -122,8 +122,6 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         formantManager.addFormant();
         formantEditorSlider.setRange(0,formantManager.getNumberOfFormantSets()-1,1.0);
         formantEditorSlider.repaint();
-        formantInterpolatorSlider.setRange(0,formantManager.getNumberOfFormantSets()-1);
-        formantInterpolatorSlider.repaint();
         
         formantEditorSlider.setValue((double)formantManager.getCurrentFormantSetId());
     };
