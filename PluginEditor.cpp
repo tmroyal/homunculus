@@ -70,8 +70,6 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
 
     addAndMakeVisible(editModeButton);
     
-    //editModeButtonAttachment.reset(new ButtonAttachment(params, "editMode", editModeButton));
-
     addAndMakeVisible(formantEditorSlider);
     
     addAndMakeVisible(formantInterpolatorSlider);
@@ -169,7 +167,6 @@ void HomunculusAudioProcessorEditor::resized()
 
 void HomunculusAudioProcessorEditor::syncFormantManager(){
     for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
-        DBG(formantManager.getCurrentFormantSet().getFormant(i).freq);
         sliders[i*3]->setValue(formantManager.getCurrentFormantSet().getFormant(i).freq);
         sliders[i*3+1]->setValue(formantManager.getCurrentFormantSet().getFormant(i).Q);
         sliders[i*3+2]->setValue(formantManager.getCurrentFormantSet().getFormant(i).gain);
