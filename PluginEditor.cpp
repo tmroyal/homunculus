@@ -1,9 +1,7 @@
 /*
   ==============================================================================
 
-    This file was auto-generated!
-
-    It contains the basic framework code for a JUCE plugin editor.
+    Juce formant synth plugin editor
 
   ==============================================================================
 */
@@ -80,7 +78,6 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     
     addAndMakeVisible(formantInterpolatorSlider);
     
-    
     formantInterpolatorSlider.setEnabled(true);
     formantEditorSlider.setEnabled(false);
     
@@ -96,7 +93,6 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         }
     };
     
-    formantInterpolatorSlider.setRange(0,processor.getNumFormantSets()-1);
     formantEditorSlider.setRange(0,processor.getNumFormantSets()-1,1);
     formantEditorSlider.setValue(processor.getCurrentFormantSetId());
     
