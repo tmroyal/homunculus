@@ -46,13 +46,13 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         };
         
         freqSlider->setNormalisableRange(NormalisableRange<double>(20,20000,0,0.4));
-        freqSlider->setEnabled(!processor.getEditMode());
+        freqSlider->setEnabled(false);
         
         QSlider->setNormalisableRange(NormalisableRange<double>(0.5,20,0,0.8));
-        QSlider->setEnabled(!processor.getEditMode());
+        QSlider->setEnabled(false);
         
         gainSlider->setNormalisableRange(NormalisableRange<double>(0.0,1.0,0,0.7));
-        gainSlider->setEnabled(!processor.getEditMode());
+        gainSlider->setEnabled(false);
     }
     
     addAndMakeVisible(attackSlider);
@@ -70,22 +70,25 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
 
     addAndMakeVisible(editModeButton);
     
-    editModeButtonAttachment.reset(new ButtonAttachment(params, "editMode", editModeButton));
+    //editModeButtonAttachment.reset(new ButtonAttachment(params, "editMode", editModeButton));
 
     addAndMakeVisible(formantEditorSlider);
     
     addAndMakeVisible(formantInterpolatorSlider);
     
     
-    formantInterpolatorSlider.setEnabled(processor.getEditMode());
-    formantEditorSlider.setEnabled(!processor.getEditMode());
+    formantInterpolatorSlider.setEnabled(true);
+    formantEditorSlider.setEnabled(false);
     
     editModeButton.onClick = [this]{
-        formantInterpolatorSlider.setEnabled(processor.getEditMode());
-        formantEditorSlider.setEnabled(!processor.getEditMode());
+        
+        bool toggleState = editModeButton.getToggleState();
+        
+        formantInterpolatorSlider.setEnabled(!toggleState);
+        formantEditorSlider.setEnabled(toggleState);
         
         for (auto i = sliders.begin(); i != sliders.end(); i++){
-            (*i)->setEnabled(!processor.getEditMode());
+            (*i)->setEnabled(toggleState);
         }
     };
     

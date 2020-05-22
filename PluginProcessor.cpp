@@ -55,10 +55,6 @@ HomunculusAudioProcessor::~HomunculusAudioProcessor()
 {
 }
 
-bool HomunculusAudioProcessor::getEditMode(){
-    return *params.getRawParameterValue("editMode");
-}
-
 void HomunculusAudioProcessor::parameterChanged (const String& parameterID, float newValue) {
     if (initialized){
         if (parameterID == "interpolate"){
