@@ -85,7 +85,6 @@ public:
         for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
             Formant interpolatedFormant = Formant::interpolate(a.getFormant(i), b.getFormant(i), t);
             fs.setFormant( i, interpolatedFormant);
-            DBG(interpolatedFormant.freq);
         }
         
         return fs;
@@ -161,18 +160,21 @@ public:
     }
     
     FormantSet getInterpolatedFormants(float ind){
+        // ind is 0-1
+        float scaledInd = ind*(formantSets.size()-1);
+        
         int lastFS = (int)formantSets.size() - 1;
         
-        if (ind > lastFS){
+        if (scaledInd > lastFS){
             return formantSets[lastFS];
         }
         
-        if (ind < 0.0){
+        if (scaledInd < 0.0){
             return formantSets[0];
         }
         
         float a, b, t;
-        t = std::modf(ind, &a);
+        t = std::modf(scaledInd, &a);
         b = a+1;
         
         if (b > lastFS){

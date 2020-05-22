@@ -114,6 +114,8 @@ private:
 
         newParams.push_back(std::make_unique<AudioParameterBool>("editMode", "Edit Mode", true));
 
+        newParams.push_back(std::make_unique<AudioParameterFloat>("interpolate", "Morph Index", 0.0, 1.0, 0.0));
+        
         return { newParams.begin(), newParams.end() };
     }
     

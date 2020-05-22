@@ -41,6 +41,7 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
     params.addParameterListener("decay", this);
     params.addParameterListener("sustain", this);
     params.addParameterListener("release", this);
+    params.addParameterListener("interpolate", this);
 
     attackParam = params.getRawParameterValue("attack");
     decayParam = params.getRawParameterValue("decay");
@@ -60,8 +61,17 @@ bool HomunculusAudioProcessor::getEditMode(){
 
 void HomunculusAudioProcessor::parameterChanged (const String& parameterID, float newValue) {
     if (initialized){
-        // because only parameter listeners are ads and r
-        setEnvelope();
+        if (parameterID == "interpolate"){
+            FormantSet currentSet = formantManager.getInterpolatedFormants(newValue);
+            for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
+                Formant fmt = currentSet.getFormant(i);
+                setFrequency(i, fmt.freq);
+                setGain(i, fmt.gain);
+                setQ(i, fmt.Q);
+            }
+        } else {
+            setEnvelope();
+        }
     }
 }
 

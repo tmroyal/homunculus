@@ -45,8 +45,6 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
             formantManager.setGain(i, gainSlider->getValue());
         };
         
-        // TODO: set value from current Formant manager settings
-        
         freqSlider->setNormalisableRange(NormalisableRange<double>(20,20000,0,0.4));
         freqSlider->setEnabled(!processor.getEditMode());
         
@@ -62,6 +60,9 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     addAndMakeVisible(sustainSlider);
     addAndMakeVisible(releaseSlider);
     
+    formantInterpolatorSliderAttachment.reset(
+                            new SliderAttachment(params, "interpolate", formantInterpolatorSlider));
+    
     attackAttachment.reset(new SliderAttachment(params, "attack", attackSlider));
     decayAttachment.reset(new SliderAttachment(params, "decay", decaySlider));
     sustainAttachment.reset(new SliderAttachment(params, "sustain", sustainSlider));
@@ -72,7 +73,9 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     editModeButtonAttachment.reset(new ButtonAttachment(params, "editMode", editModeButton));
 
     addAndMakeVisible(formantEditorSlider);
+    
     addAndMakeVisible(formantInterpolatorSlider);
+    
     
     formantInterpolatorSlider.setEnabled(processor.getEditMode());
     formantEditorSlider.setEnabled(!processor.getEditMode());
@@ -94,29 +97,16 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
          formantManager.setCurrentFormantSet((int)formantEditorSlider.getValue());
          FormantSet currentSet = formantManager.getCurrentFormantSet();
         
-        syncFormantManager();
+         syncFormantManager();
         
          for (int i = 0; i < NUMBER_OF_FORMANTS ; i++){
              Formant fmt = currentSet.getFormant(i);
-             //sliders[i*3]->setValue(fmt.freq);
-             //sliders[i*3+1]->setValue(fmt.Q);
-             //sliders[i*3+2]->setValue(fmt.gain);
 
              processor.setFrequency(i, fmt.freq);
              processor.setQ(i, fmt.Q);
              processor.setGain(i, fmt.gain);
          }
          
-    };
-    
-    formantInterpolatorSlider.onValueChange = [this]{
-        FormantSet currentSet = formantManager.getInterpolatedFormants(formantInterpolatorSlider.getValue());
-        for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
-            Formant fmt = currentSet.getFormant(i);
-            processor.setFrequency(i, fmt.freq);
-            processor.setGain(i, fmt.gain);
-            processor.setQ(i, fmt.Q);
-        }
     };
     
     addAndMakeVisible(addFormantButton);
