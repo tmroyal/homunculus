@@ -30,10 +30,8 @@ public:
 class BlitSynthVoice : public SynthesiserVoice {
 public:
     BlitSynthVoice(){
-        
         envelope.setSampleRate(getSampleRate());
         setParams(0.1, 0.2, 0.5, 0.5);
-        
     }
     
     bool canPlaySound(SynthesiserSound* sound) override {
@@ -68,6 +66,14 @@ public:
         
     }
     
+    void setLFOFreq(float freq){
+        LFODelta = (freq/getSampleRate())*MathConstants<double>::twoPi;
+    }
+    
+    void setLFOAmount(float perc){
+        LFOScale = perc*(10/getSampleRate())*MathConstants<double>::twoPi;
+    }
+    
     void pitchWheelMoved (int) override      {}
     void controllerMoved (int, int) override {}
     
@@ -97,8 +103,9 @@ public:
                     break;
                 }
                 
-                currentAngle += angleDelta;
-
+                currentAngle += angleDelta+sin(currentLFOAngle)*LFOScale;
+                currentLFOAngle += LFODelta;
+                
                 ++startSample;
             }
         }
@@ -112,11 +119,11 @@ public:
         params.release = release;
         
         envelope.setParameters(params);
-
     }
     
 private:
     double currentAngle = 0.0, angleDelta = 0.0, level=0.0;
+    double currentLFOAngle = 0.0, LFODelta = 0.0, LFOScale = 0.0;
     bool tailOff = false;
     double m = 1.0;
         
