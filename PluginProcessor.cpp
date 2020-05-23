@@ -48,7 +48,6 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
     lfoFreqParam = params.getRawParameterValue("lfoFreq");
     lfoAmpParam = params.getRawParameterValue("lfoAmount");
 
-    //setSynthParams();
 }
 
 HomunculusAudioProcessor::~HomunculusAudioProcessor()
@@ -56,6 +55,10 @@ HomunculusAudioProcessor::~HomunculusAudioProcessor()
 }
 
 void HomunculusAudioProcessor::parameterChanged (const String& parameterID, float newValue) {
+    
+    // the parameter "interpolate" is the only one that requires
+    // special treatment. everything else is an lfo or
+    // evnvelope setting
     if (initialized){
         if (parameterID == "interpolate"){
             FormantSet currentSet = formantManager.getInterpolatedFormants(newValue);
@@ -82,9 +85,8 @@ int HomunculusAudioProcessor::getCurrentFormantSetId(){
 void HomunculusAudioProcessor::setSynthParams(){
     for (auto i = 0; i < NUMBER_OF_VOICES; i++){
         dynamic_cast<BlitSynthVoice*>(
-                    blitSynth.getVoice(i))->setParams(
-                            *attackParam, *decayParam, *sustainParam, *releaseParam, *lfoFreqParam, *lfoAmpParam
-                                                      );
+            blitSynth.getVoice(i))->setParams(
+                *attackParam, *decayParam, *sustainParam, *releaseParam, *lfoFreqParam, *lfoAmpParam);
     }
 }
 
@@ -170,11 +172,10 @@ void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
     blitSynth.setCurrentPlaybackSampleRate(sampleRate);
     
     filterBankGraph->setPlayConfigDetails (1, 1, sampleRate, samplesPerBlock);
-    
     filterBankGraph->prepareToPlay (sampleRate, samplesPerBlock);
-    
     filterBankGraph->clear();
     
+    // add input and output to filterBank
     filterBankInputNode = filterBankGraph->addNode(std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioInputNode));
     filterBankOutputNode = filterBankGraph->addNode(std::make_unique<AudioGraphIOProcessor> (AudioGraphIOProcessor::audioOutputNode));
 

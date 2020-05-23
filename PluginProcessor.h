@@ -18,11 +18,6 @@
 
 //==============================================================================
 
-enum StringValue{
-    eFreq,
-    eQ,
-    eGain
-};
 
 class HomunculusAudioProcessor  : public AudioProcessor, public AudioProcessorValueTreeState::Listener
 {
