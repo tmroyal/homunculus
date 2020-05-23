@@ -37,10 +37,7 @@ public:
         double intpart;
         double fracPart = modf(index, &intpart);
         
-        double v1 = table[a];
-        double v2 = table[b];
-        
-        return v1*(1-fracPart)+v2*fracPart;
+        return table[a]*(1-fracPart)+table[b]*fracPart;
     }
     
 private:
