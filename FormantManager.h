@@ -239,9 +239,14 @@ public:
             formantSets.push_back(FormantSet(formantSetXml));
         }
         
-        // ensure there is at least two formant sets. if not, initialize;
-        
-        // iterate over FormantSet children on xml and create Formant sets based off of these settings
+        // if xml has 0-1 formanSets
+        // start over
+        if (formantSets.size() < 2){
+            formantSets.clear();
+            for (int i = 0; i < NUMBER_INITIAL_FORMANT_SETS; i++){
+                formantSets.push_back(FormantSet());
+            }
+        }
     }
     
 private:
