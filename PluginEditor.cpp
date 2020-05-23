@@ -153,23 +153,26 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
     
     // setup edit mode button
     addAndMakeVisible(editModeButton);
+    
     editModeButton.onClick = [this]{
         bool toggleState = editModeButton.getToggleState();
-        
+        // sliders
         formantInterpolatorSlider.setEnabled(!toggleState);
+        formantInterpolatorSlider.setVisible(!toggleState);
+
+        formantEditorSlider.setEnabled(toggleState);
+        formantEditorSlider.setVisible(toggleState);
         
+        // buttons
         addFormantButton.setEnabled(toggleState);
-        removeFormantButton.setEnabled(toggleState && formantManager.getNumberOfFormantSets() > 2);
         addFormantButton.setVisible(toggleState);
+
+        removeFormantButton.setEnabled(toggleState && formantManager.getNumberOfFormantSets() > 2);
         removeFormantButton.setVisible(toggleState);
         
+        // labels
         selectFormantLabel.setVisible(toggleState);
         interpolateFormantLabel.setVisible(!toggleState);
-        
-        formantEditorSlider.setEnabled(toggleState);
-        
-        formantEditorSlider.setVisible(toggleState);
-        formantInterpolatorSlider.setVisible(!toggleState);
         
         if (toggleState){
             syncFormantManager();
