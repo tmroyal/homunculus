@@ -156,6 +156,9 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
         bool toggleState = editModeButton.getToggleState();
         
         formantInterpolatorSlider.setEnabled(!toggleState);
+        
+        addFormantButton.setEnabled(toggleState);
+        removeFormantButton.setEnabled(toggleState && formantManager.getNumberOfFormantSets() > 2);
         formantEditorSlider.setEnabled(toggleState);
         
         for (auto i = sliders.begin(); i != sliders.end(); i++){
@@ -178,6 +181,7 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
     // setup add formant button
     addAndMakeVisible(addFormantButton);
     addFormantButton.setButtonText("+");
+    addFormantButton.setEnabled(false);
     addFormantButton.onClick = [this]{
         formantManager.addFormant();
         
