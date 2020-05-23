@@ -108,8 +108,14 @@ public:
                     break;
                 }
                 
-                currentAngle += angleDelta+sineTable->get(currentLFOAngle)*LFOScale;
-                currentLFOAngle += LFODelta;
+                currentAngle += fmod(
+                        angleDelta+sineTable->get(currentLFOAngle)*LFOScale,
+                        MathConstants<double>::twoPi
+                                     );
+                currentLFOAngle += fmod(
+                            LFODelta,
+                            MathConstants<double>::twoPi
+                                    );
                 
                 ++startSample;
             }
