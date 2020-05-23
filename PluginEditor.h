@@ -36,8 +36,8 @@ private:
     void setupEnvelopeSliders();
     void setupLFOSliders();
     void setupFormantUI();
-    
-    void setupEnvelopeSlider(Slider& slider, unique_ptr<SliderAttachment>& attachment, String parameterName);
+        
+    void setupAttachedSlider(Slider& slider, unique_ptr<SliderAttachment>& attachment, String parameterName);
     
     MidiKeyboardComponent kbComponent;
     
