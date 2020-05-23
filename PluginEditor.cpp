@@ -17,7 +17,7 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         params(ps),
         formantManager(fmgr)
 {
-    setSize (FORMANT_EDITOR_LEFT+BOX_SIZE*4.3, 480);
+    setSize (FORMANT_EDITOR_LEFT+BOX_SIZE*4.3-80, 480);
     
     setLookAndFeel(&lookAndFeel);
     lookAndFeel.setColour(Slider::textBoxOutlineColourId, Colours::transparentBlack);
@@ -58,6 +58,7 @@ void HomunculusAudioProcessorEditor::setupLabels(){
     setupLabel(envSLabel, "S");
     setupLabel(envRLabel, "R");
     setupLabel(selectFormantLabel, "Edit Sel.");
+    selectFormantLabel.setVisible(false);
     setupLabel(interpolateFormantLabel, "Morph");
     setupLabel(lfoRateLabel, "LFO Hz.");
     setupLabel(lfoAmountLabel, "LFO %");
@@ -159,16 +160,33 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
         
         addFormantButton.setEnabled(toggleState);
         removeFormantButton.setEnabled(toggleState && formantManager.getNumberOfFormantSets() > 2);
+        addFormantButton.setVisible(toggleState);
+        removeFormantButton.setVisible(toggleState);
+        
+        selectFormantLabel.setVisible(toggleState);
+        interpolateFormantLabel.setVisible(!toggleState);
+        
         formantEditorSlider.setEnabled(toggleState);
+        
+        formantEditorSlider.setVisible(toggleState);
+        formantInterpolatorSlider.setVisible(!toggleState);
+        
+        if (toggleState){
+            syncFormantManager();
+        } else {
+            processor.resetInterpolator();
+        }
         
         for (auto i = sliders.begin(); i != sliders.end(); i++){
             (*i)->setEnabled(toggleState);
         }
     };
     
+    
     // setup formant editor slider
     addAndMakeVisible(formantEditorSlider);
     formantEditorSlider.setEnabled(false);
+    formantEditorSlider.setVisible(false);
     formantEditorSlider.onValueChange = [this]{
         formantManager.setCurrentFormantSet(
                 (int)formantEditorSlider.getValue());
@@ -182,6 +200,8 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
     addAndMakeVisible(addFormantButton);
     addFormantButton.setButtonText("+");
     addFormantButton.setEnabled(false);
+    addFormantButton.setVisible(false);
+
     addFormantButton.onClick = [this]{
         formantManager.addFormant();
         
@@ -191,6 +211,9 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
     // setup removeFormant button
     addAndMakeVisible(removeFormantButton);
     removeFormantButton.setButtonText("-");
+    removeFormantButton.setEnabled(false);
+    removeFormantButton.setVisible(false);
+
     removeFormantButton.onClick = [this]{
         formantManager.removeFormant();
         
@@ -307,17 +330,17 @@ void HomunculusAudioProcessorEditor::resizeADSRControls(){
 
 void HomunculusAudioProcessorEditor::resizeFormantEditors(){
     interpolateFormantLabel.setBounds(FORMANT_EDITOR_LEFT, FORMANT_EDITOR_TOP, 80, LABEL_SIZE);
-    selectFormantLabel.setBounds(FORMANT_EDITOR_LEFT+80, FORMANT_EDITOR_TOP, 80, LABEL_SIZE);
+    selectFormantLabel.setBounds(FORMANT_EDITOR_LEFT, FORMANT_EDITOR_TOP, 80, LABEL_SIZE);
     
     formantInterpolatorSlider.setBounds(FORMANT_EDITOR_LEFT, FORMANT_EDITOR_TOP+LABEL_SIZE, 80, getHeight()-LABEL_SIZE-FORMANT_EDITOR_TOP-80);
-    formantEditorSlider.setBounds(FORMANT_EDITOR_LEFT+80, FORMANT_EDITOR_TOP+LABEL_SIZE, 80, getHeight()-LABEL_SIZE-FORMANT_EDITOR_TOP-80);
+    formantEditorSlider.setBounds(FORMANT_EDITOR_LEFT, FORMANT_EDITOR_TOP+LABEL_SIZE, 80, getHeight()-LABEL_SIZE-FORMANT_EDITOR_TOP-80);
     
     int buttonHeight = (getHeight()-LABEL_SIZE-FORMANT_EDITOR_TOP-LABEL_SIZE-80)/3;
     
-    addFormantButton.setBounds(FORMANT_EDITOR_LEFT+160, FORMANT_EDITOR_TOP+LABEL_SIZE, 40, buttonHeight);
-    removeFormantButton.setBounds(FORMANT_EDITOR_LEFT+160, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight, 40, buttonHeight);
-    interpolateButtonLabel.setBounds(FORMANT_EDITOR_LEFT+160, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight*2, 40, 24);
-    editModeButton.setBounds(FORMANT_EDITOR_LEFT+160, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight*2+24, 40, buttonHeight-24);
+    addFormantButton.setBounds(FORMANT_EDITOR_LEFT+80, FORMANT_EDITOR_TOP+LABEL_SIZE, 40, buttonHeight);
+    removeFormantButton.setBounds(FORMANT_EDITOR_LEFT+80, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight, 40, buttonHeight);
+    interpolateButtonLabel.setBounds(FORMANT_EDITOR_LEFT+80, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight*2, 40, 24);
+    editModeButton.setBounds(FORMANT_EDITOR_LEFT+80, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight*2+24, 40, buttonHeight-24);
 }
 
 

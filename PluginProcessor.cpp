@@ -47,7 +47,8 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
 
     lfoFreqParam = params.getRawParameterValue("lfoFreq");
     lfoAmpParam = params.getRawParameterValue("lfoAmount");
-
+    
+    interpParam = params.getRawParameterValue("interpolate");
 }
 
 HomunculusAudioProcessor::~HomunculusAudioProcessor()
@@ -61,16 +62,25 @@ void HomunculusAudioProcessor::parameterChanged (const String& parameterID, floa
     // evnvelope setting
     if (initialized){
         if (parameterID == "interpolate"){
-            FormantSet currentSet = formantManager.getInterpolatedFormants(newValue);
-            for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
-                Formant fmt = currentSet.getFormant(i);
-                setFrequency(i, fmt.freq);
-                setGain(i, fmt.gain);
-                setQ(i, fmt.Q);
-            }
+            interpolateFormants(newValue);
         } else {
             setSynthParams();
         }
+    }
+}
+
+void HomunculusAudioProcessor::resetInterpolator(){
+    interpolateFormants(*interpParam);
+    
+}
+
+void HomunculusAudioProcessor::interpolateFormants(float value){
+    FormantSet currentSet = formantManager.getInterpolatedFormants(value);
+    for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
+        Formant fmt = currentSet.getFormant(i);
+        setFrequency(i, fmt.freq);
+        setGain(i, fmt.gain);
+        setQ(i, fmt.Q);
     }
 }
 

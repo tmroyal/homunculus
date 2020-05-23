@@ -72,10 +72,11 @@ public:
 
     
     MidiKeyboardState keyboardState;
+    void resetInterpolator();
     
 private:
-    
     void setSynthParams();
+    void interpolateFormants(float value);
     
     std::unique_ptr<AudioProcessorGraph> filterBankGraph;
     Node::Ptr filterBankInputNode;
@@ -90,7 +91,9 @@ private:
     std::atomic<float>* releaseParam = nullptr;
     std::atomic<float>* lfoFreqParam = nullptr;
     std::atomic<float>* lfoAmpParam = nullptr;
+    std::atomic<float>* interpParam = nullptr;
 
+    
     FormantManager formantManager;
 
     bool initialized = false;

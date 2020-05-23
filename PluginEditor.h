@@ -122,7 +122,7 @@ private:
     const static int LFO_LEFT = BOX_SIZE;
     const static int LFO_TOP = LABEL_SIZE*0.5;
     
-    const static int TITLE_LEFT = FORMANT_EDITOR_LEFT+BOX_SIZE*2.3;
+    const static int TITLE_LEFT = FORMANT_EDITOR_LEFT+BOX_SIZE*2.3-80;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HomunculusAudioProcessorEditor)
 };
