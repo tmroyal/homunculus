@@ -104,28 +104,27 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     
     formantEditorSlider.onValueChange = [this]{
          formantManager.setCurrentFormantSet((int)formantEditorSlider.getValue());
-         FormantSet currentSet = formantManager.getCurrentFormantSet();
         
          syncFormantManager();
-        
-         for (int i = 0; i < NUMBER_OF_FORMANTS ; i++){
-             Formant fmt = currentSet.getFormant(i);
-
-             processor.setFrequency(i, fmt.freq);
-             processor.setQ(i, fmt.Q);
-             processor.setGain(i, fmt.gain);
-         }
-         
     };
     
     addAndMakeVisible(addFormantButton);
     addFormantButton.setButtonText("+");
     addFormantButton.onClick = [this]{
         formantManager.addFormant();
-        formantEditorSlider.setRange(0,formantManager.getNumberOfFormantSets()-1,1.0);
-        formantEditorSlider.repaint();
         
-        formantEditorSlider.setValue((double)formantManager.getCurrentFormantSetId());
+        syncFormantManager();
+    };
+    
+    addAndMakeVisible(removeFormantButton);
+    removeFormantButton.setButtonText("-");
+    removeFormantButton.setEnabled(false);
+    
+    removeFormantButton.onClick = [this]{
+        formantManager.removeFormant();
+
+        syncFormantManager();
+
     };
     
     syncFormantManager();
@@ -163,8 +162,9 @@ void HomunculusAudioProcessorEditor::resized()
     sustainSlider.setBounds(10, envTop+60, getWidth()-10, 20);
     releaseSlider.setBounds(10, envTop+90, getWidth()-10, 20);
     
-    editModeButton.setBounds(10, envTop+120, (getWidth()-10)/2, 20);
-    addFormantButton.setBounds(getWidth()/2, envTop+120, (getWidth()-10)/2, 20);
+    editModeButton.setBounds(10, envTop+120, (getWidth()-10)/3, 20);
+    addFormantButton.setBounds(getWidth()/3, envTop+120, (getWidth()-10)/3, 20);
+    removeFormantButton.setBounds(getWidth()*2/3, envTop+120, (getWidth()-10)/3, 20);
     
     formantEditorSlider.setBounds(10, envTop+150, getWidth()-10, 20);
     formantInterpolatorSlider.setBounds(10, envTop+180, getWidth()-10, 20);
@@ -177,6 +177,24 @@ void HomunculusAudioProcessorEditor::resized()
 }
 
 void HomunculusAudioProcessorEditor::syncFormantManager(){
+    
+    FormantSet currentSet = formantManager.getCurrentFormantSet();
+    // update audio components
+    for (int i = 0; i < NUMBER_OF_FORMANTS ; i++){
+        Formant fmt = currentSet.getFormant(i);
+        
+        processor.setFrequency(i, fmt.freq);
+        processor.setQ(i, fmt.Q);
+        processor.setGain(i, fmt.gain);
+    }
+    // update ui components
+    formantEditorSlider.setRange(0,formantManager.getNumberOfFormantSets()-1,1.0);
+    formantEditorSlider.repaint();
+    
+    formantEditorSlider.setValue((double)formantManager.getCurrentFormantSetId());
+    
+    removeFormantButton.setEnabled(formantManager.getNumberOfFormantSets() > 2);
+    
     for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
         sliders[i*3]->setValue(formantManager.getCurrentFormantSet().getFormant(i).freq);
         sliders[i*3+1]->setValue(formantManager.getCurrentFormantSet().getFormant(i).Q);

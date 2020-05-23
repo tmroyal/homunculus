@@ -153,6 +153,14 @@ public:
         }
     }
     
+    void removeFormant(){
+        formantSets.erase(formantSets.begin()+currentFormantSet);
+        
+        if (currentFormantSet > 0){
+            currentFormantSet -= 1;
+        }
+    }
+    
     void removeCurrentFormantSet(){
         if (formantSets.size()>0){
             formantSets.erase(formantSets.begin() + currentFormantSet);
