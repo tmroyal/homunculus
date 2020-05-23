@@ -17,7 +17,13 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         params(ps),
         formantManager(fmgr)
 {
-    setSize (400, 650);
+    setSize (FORMANT_EDITOR_LEFT+BOX_SIZE*4.3, 480);
+    
+    setLookAndFeel(&lookAndFeel);
+    lookAndFeel.setColour(Slider::textBoxOutlineColourId, Colours::transparentBlack);
+
+
+    setupLabels();
     
     addAndMakeVisible(kbComponent);
     
@@ -27,13 +33,43 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     setupFormantUI();
     
     syncFormantManager();
+    
     resized();
 }
 
 HomunculusAudioProcessorEditor::~HomunculusAudioProcessorEditor()
 {
+    setLookAndFeel(nullptr);
 }
 // -------------
+
+void HomunculusAudioProcessorEditor::setupLabels(){
+    setupLabel(titleLabel, "H\nu\nm\nu\nn\nc\nl\no\nu\ns\nFormant\nSynth");
+    titleLabel.setFont(Font("Futura", 28.0, Font::plain));
+    
+    setupLabel(freqLabel,"F");
+    setupLabel(QLabel, "Q");
+    setupLabel(gainLabel, "Gain");
+    setupLabel(f1Label, "F1");
+    setupLabel(f2Label, "F2");
+    setupLabel(f3Label, "F3");
+    setupLabel(envALabel, "A");
+    setupLabel(envDLabel, "D");
+    setupLabel(envSLabel, "S");
+    setupLabel(envRLabel, "R");
+    setupLabel(selectFormantLabel, "Edit Sel.");
+    setupLabel(interpolateFormantLabel, "Morph");
+    setupLabel(lfoRateLabel, "LFO Hz.");
+    setupLabel(lfoAmountLabel, "LFO %");
+    setupLabel(interpolateButtonLabel, "Edit");
+    interpolateButtonLabel.setFont(Font(12.0));
+}
+
+void HomunculusAudioProcessorEditor::setupLabel(Label& label, String labelText){
+    addAndMakeVisible(label);
+    label.setText(labelText, dontSendNotification);
+    label.setJustificationType(Justification::centred);
+}
 
 void HomunculusAudioProcessorEditor::setupFormantSliders(){
     for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
@@ -68,14 +104,23 @@ void HomunculusAudioProcessorEditor::setupFormantSliders(){
         freqSlider->setNormalisableRange(
                     NormalisableRange<double>(20,20000,0,0.4));
         freqSlider->setEnabled(false);
+        freqSlider->setSliderStyle(Slider::SliderStyle::Rotary);
+        freqSlider->setTextBoxStyle(Slider::TextBoxBelow, false, BOX_SIZE, BOX_SIZE/6);
+        freqSlider->setNumDecimalPlacesToDisplay(2);
         
         QSlider->setNormalisableRange(
                     NormalisableRange<double>(0.5,20,0,0.8));
         QSlider->setEnabled(false);
+        QSlider->setSliderStyle(Slider::SliderStyle::Rotary);
+        QSlider->setTextBoxStyle(Slider::TextBoxBelow, false, BOX_SIZE, BOX_SIZE/6);
+        QSlider->setNumDecimalPlacesToDisplay(2);
         
         gainSlider->setNormalisableRange(
                     NormalisableRange<double>(0.0,1.0,0,0.7));
         gainSlider->setEnabled(false);
+        gainSlider->setSliderStyle(Slider::SliderStyle::Rotary);
+        gainSlider->setTextBoxStyle(Slider::TextBoxBelow, false, BOX_SIZE, BOX_SIZE/6);
+        gainSlider->setNumDecimalPlacesToDisplay(2);
     }
 }
 
@@ -95,10 +140,15 @@ void HomunculusAudioProcessorEditor::setupAttachedSlider(Slider& slider, unique_
     
     addAndMakeVisible(slider);
     attachment.reset(new SliderAttachment(params, parameterName, slider));
+    slider.setSliderStyle(Slider::Rotary);
+    slider.setTextBoxStyle(Slider::TextBoxBelow, false, BOX_SIZE, BOX_SIZE/6);
+    slider.setNumDecimalPlacesToDisplay(2);
 }
 
 void HomunculusAudioProcessorEditor::setupFormantUI(){
     setupAttachedSlider(formantInterpolatorSlider, formantInterpolatorSliderAttachment, "interpolate");
+    formantInterpolatorSlider.setSliderStyle(Slider::LinearVertical);
+    formantInterpolatorSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 80, LABEL_SIZE);
     
     // setup edit mode button
     addAndMakeVisible(editModeButton);
@@ -122,6 +172,8 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
         
         syncFormantManager();
     };
+    formantEditorSlider.setSliderStyle(Slider::LinearVertical);
+    formantEditorSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 80, LABEL_SIZE);
     
     // setup add formant button
     addAndMakeVisible(addFormantButton);
@@ -186,39 +238,90 @@ void HomunculusAudioProcessorEditor::syncFormantManager(){
 void HomunculusAudioProcessorEditor::paint (Graphics& g)
 {
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
+    
+    // draw divider lines
+    
+    // between formants and adsr
+    g.drawLine(ADSR_LEFT-LABEL_SIZE*2, 10, ADSR_LEFT-LABEL_SIZE*2, getHeight()-90);
+    
+    // between adsr and formant chooser panel
+    g.drawLine(FORMANT_EDITOR_LEFT, 10, FORMANT_EDITOR_LEFT, getHeight()-90);
+    
+    // between chooser and title box
+    g.drawLine(TITLE_LEFT+BOX_SIZE*1/3, 10, TITLE_LEFT+BOX_SIZE*1/3, getHeight()-90);
+    
+    // between flo and formants
+    g.drawLine(LFO_LEFT, FORMANTS_TOP-LABEL_SIZE*0.25, LFO_LEFT+2*BOX_SIZE, FORMANTS_TOP-LABEL_SIZE*0.25);
 
 }
 
 void HomunculusAudioProcessorEditor::resized()
 {
-    auto it = sliders.begin();
-    auto end = sliders.end();
-    auto i = 0;
+    resizeFormantControls();
+    resizeADSRControls();
+    resizeFormantEditors();
+    resizeLFOControls();
     
-    while (it != end){
-        (**it).setBounds(10, 10+i*30, getWidth()-10, 20);
-        it++; i++;
-    }
-    
-    auto envTop = sliders.size()*30+10;
-    
-    attackSlider.setBounds(10, envTop, getWidth()-10, 20);
-    decaySlider.setBounds(10, envTop+30, getWidth()-10, 20);
-    sustainSlider.setBounds(10, envTop+60, getWidth()-10, 20);
-    releaseSlider.setBounds(10, envTop+90, getWidth()-10, 20);
-    
-    editModeButton.setBounds(10, envTop+120, (getWidth()-10)/3, 20);
-    addFormantButton.setBounds(getWidth()/3, envTop+120, (getWidth()-10)/3, 20);
-    removeFormantButton.setBounds(getWidth()*2/3, envTop+120, (getWidth()-10)/3, 20);
-    
-    formantEditorSlider.setBounds(10, envTop+150, getWidth()-10, 20);
-    formantInterpolatorSlider.setBounds(10, envTop+180, getWidth()-10, 20);
-    
-    lfoFreqSlider.setBounds(10, envTop+210, getWidth()-10, 20);
-    lfoAmountSlider.setBounds(10, envTop+240, getWidth()-10, 20);
-    
+    titleLabel.setBounds(TITLE_LEFT,0,BOX_SIZE*2, getHeight()-80);
+
     kbComponent.setBounds(0, getHeight()-80, getWidth(), 80);
     
 }
 
+void HomunculusAudioProcessorEditor::resizeFormantControls(){
+    auto it = sliders.begin();
+    auto end = sliders.end();
+    auto i = 0;
+    
+    f1Label.setBounds(FORMANTS_LEFT, FORMANTS_TOP, BOX_SIZE, LABEL_SIZE);
+    f2Label.setBounds(FORMANTS_LEFT+BOX_SIZE, FORMANTS_TOP, BOX_SIZE, LABEL_SIZE);
+    f3Label.setBounds(FORMANTS_LEFT+BOX_SIZE*2, FORMANTS_TOP, BOX_SIZE, LABEL_SIZE);
+    
+    freqLabel.setBounds(FORMANTS_LEFT-LABEL_SIZE*2.5, FORMANTS_TOP+LABEL_SIZE, BOX_SIZE, BOX_SIZE);
+    QLabel.setBounds(FORMANTS_LEFT-LABEL_SIZE*2.5, FORMANTS_TOP+LABEL_SIZE+BOX_SIZE, BOX_SIZE, BOX_SIZE);
+    gainLabel.setBounds(FORMANTS_LEFT-LABEL_SIZE*2.5, FORMANTS_TOP+LABEL_SIZE+BOX_SIZE*2, BOX_SIZE, BOX_SIZE);
+    
+    while (it != end){
+        (**it).setBounds((i/3)*BOX_SIZE+FORMANTS_LEFT, (i%3)*BOX_SIZE+FORMANTS_TOP+LABEL_SIZE, BOX_SIZE, BOX_SIZE);
+        it++; i++;
+    }
+}
 
+void HomunculusAudioProcessorEditor::resizeADSRControls(){
+        envALabel.setBounds(ADSR_LEFT-LABEL_SIZE*2.5, ADSR_TOP, BOX_SIZE, BOX_SIZE);
+    envDLabel.setBounds(ADSR_LEFT-LABEL_SIZE*2.5, ADSR_TOP+BOX_SIZE, BOX_SIZE, BOX_SIZE);
+    envSLabel.setBounds(ADSR_LEFT-LABEL_SIZE*2.5, ADSR_TOP+BOX_SIZE*2, BOX_SIZE, BOX_SIZE);
+    envRLabel.setBounds(ADSR_LEFT-LABEL_SIZE*2.5, ADSR_TOP+BOX_SIZE*3, BOX_SIZE, BOX_SIZE);
+    
+    
+    attackSlider.setBounds(ADSR_LEFT, ADSR_TOP, BOX_SIZE, BOX_SIZE);
+    decaySlider.setBounds(ADSR_LEFT, BOX_SIZE+ADSR_TOP, BOX_SIZE, BOX_SIZE);
+    sustainSlider.setBounds(ADSR_LEFT, 2*BOX_SIZE+ADSR_TOP, BOX_SIZE, BOX_SIZE);
+    releaseSlider.setBounds(ADSR_LEFT, 3*BOX_SIZE+ADSR_TOP, BOX_SIZE, BOX_SIZE);
+
+}
+
+void HomunculusAudioProcessorEditor::resizeFormantEditors(){
+    interpolateFormantLabel.setBounds(FORMANT_EDITOR_LEFT, FORMANT_EDITOR_TOP, 80, LABEL_SIZE);
+    selectFormantLabel.setBounds(FORMANT_EDITOR_LEFT+80, FORMANT_EDITOR_TOP, 80, LABEL_SIZE);
+    
+    formantInterpolatorSlider.setBounds(FORMANT_EDITOR_LEFT, FORMANT_EDITOR_TOP+LABEL_SIZE, 80, getHeight()-LABEL_SIZE-FORMANT_EDITOR_TOP-80);
+    formantEditorSlider.setBounds(FORMANT_EDITOR_LEFT+80, FORMANT_EDITOR_TOP+LABEL_SIZE, 80, getHeight()-LABEL_SIZE-FORMANT_EDITOR_TOP-80);
+    
+    int buttonHeight = (getHeight()-LABEL_SIZE-FORMANT_EDITOR_TOP-LABEL_SIZE-80)/3;
+    
+    addFormantButton.setBounds(FORMANT_EDITOR_LEFT+160, FORMANT_EDITOR_TOP+LABEL_SIZE, 40, buttonHeight);
+    removeFormantButton.setBounds(FORMANT_EDITOR_LEFT+160, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight, 40, buttonHeight);
+    interpolateButtonLabel.setBounds(FORMANT_EDITOR_LEFT+160, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight*2, 40, 24);
+    editModeButton.setBounds(FORMANT_EDITOR_LEFT+160, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight*2+24, 40, buttonHeight-24);
+}
+
+
+void HomunculusAudioProcessorEditor::resizeLFOControls(){
+    lfoRateLabel.setBounds(LFO_LEFT, LFO_TOP, BOX_SIZE, LABEL_SIZE);
+    lfoFreqSlider.setBounds(LFO_LEFT, LFO_TOP+LABEL_SIZE, BOX_SIZE, BOX_SIZE);
+    
+    lfoAmountLabel.setBounds(LFO_LEFT+BOX_SIZE, LFO_TOP, BOX_SIZE, LABEL_SIZE);
+    lfoAmountSlider.setBounds(LFO_LEFT+BOX_SIZE, LFO_TOP+LABEL_SIZE, BOX_SIZE, BOX_SIZE);
+    
+}
