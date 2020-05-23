@@ -28,7 +28,7 @@ HomunculusAudioProcessor::HomunculusAudioProcessor():
 {
     
     for (auto i = 0; i < NUMBER_OF_VOICES; ++i)
-        blitSynth.addVoice (new BlitSynthVoice());
+        blitSynth.addVoice (new BlitSynthVoice(&sineTable));
     
     blitSynth.addSound (new BlitSynthSound());
     

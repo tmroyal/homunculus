@@ -14,6 +14,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "SineTable.h"
 
 class BlitSynthSound : public SynthesiserSound {
 public:
@@ -29,7 +30,8 @@ public:
 // TODO:: pull these methods into c++ file
 class BlitSynthVoice : public SynthesiserVoice {
 public:
-    BlitSynthVoice(){
+    BlitSynthVoice(SineTable* table){
+        sineTable = table;
         envelope.setSampleRate(getSampleRate());
         setParams(0.1, 0.2, 0.5, 0.5,0.0,0.0);
     }
@@ -89,9 +91,8 @@ public:
                 if (currentAngle == 0.0){
                     currentSample = 1.0;
                 } else {
-                    currentSample = (sin(m*currentAngle)/(m*sin(currentAngle)))*level;
+                    currentSample = (sineTable->get(m*currentAngle)/(m*sineTable->get(currentAngle)))*level;
                 }
-                
 
                 float envSample = envelope.getNextSample();
                 
@@ -107,7 +108,7 @@ public:
                     break;
                 }
                 
-                currentAngle += angleDelta+sin(currentLFOAngle)*LFOScale;
+                currentAngle += angleDelta+sineTable->get(currentLFOAngle)*LFOScale;
                 currentLFOAngle += LFODelta;
                 
                 ++startSample;
@@ -116,6 +117,7 @@ public:
     }
     
     void setParams(float attack, float decay, float sustain, float release, float lfoF, float lfoA){
+        
         ADSR::Parameters params;
         params.attack = attack;
         params.decay = decay;
@@ -133,6 +135,7 @@ private:
     double currentLFOAngle = 0.0, LFODelta = 0.0, LFOScale = 0.0;
     bool tailOff = false;
     double m = 1.0;
+    SineTable* sineTable;
         
     ADSR envelope;
 };

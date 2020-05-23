@@ -14,7 +14,7 @@
 #include "BlitSynth.h"
 #include "HumBPF.h"
 #include "FormantManager.h"
-
+#include "SineTable.h"
 
 //==============================================================================
 
@@ -95,6 +95,8 @@ private:
     FormantManager formantManager;
 
     bool initialized = false;
+    
+    SineTable sineTable;
     
     static AudioProcessorValueTreeState::ParameterLayout createLayout(){
         std::vector<std::unique_ptr<RangedAudioParameter>> newParams;
