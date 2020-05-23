@@ -39,6 +39,8 @@ void HomunculusAudioProcessorEditor::setupFormantSliders(){
     for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
         std::string num = std::to_string(i+1);
         
+        // makeFormantSlider
+        
         auto* freqSlider = sliders.add(new Slider());
         auto* QSlider = sliders.add(new Slider());
         auto* gainSlider = sliders.add(new Slider());
@@ -84,8 +86,6 @@ void HomunculusAudioProcessorEditor::setupEnvelopeSliders(){
     sustainAttachment.reset(new SliderAttachment(params, "sustain", sustainSlider));
     releaseAttachment.reset(new SliderAttachment(params, "release", releaseSlider));
     
-    formantInterpolatorSliderAttachment.reset(
-                                              new SliderAttachment(params, "interpolate", formantInterpolatorSlider));
 }
 
 void HomunculusAudioProcessorEditor::setupLFOSliders(){
@@ -97,6 +97,10 @@ void HomunculusAudioProcessorEditor::setupLFOSliders(){
 }
 
 void HomunculusAudioProcessorEditor::setupFormantUI(){
+    formantInterpolatorSliderAttachment.reset(
+                                              new SliderAttachment(params, "interpolate", formantInterpolatorSlider));
+
+    
     addAndMakeVisible(editModeButton);
     addAndMakeVisible(formantEditorSlider);
     addAndMakeVisible(formantInterpolatorSlider);
@@ -187,7 +191,8 @@ void HomunculusAudioProcessorEditor::resized()
 void HomunculusAudioProcessorEditor::syncFormantManager(){
     
     FormantSet currentSet = formantManager.getCurrentFormantSet();
-    // update audio components
+    
+    // set filter frequencies according to formants
     for (int i = 0; i < NUMBER_OF_FORMANTS ; i++){
         Formant fmt = currentSet.getFormant(i);
         
@@ -195,17 +200,28 @@ void HomunculusAudioProcessorEditor::syncFormantManager(){
         processor.setQ(i, fmt.Q);
         processor.setGain(i, fmt.gain);
     }
+    
     // update ui components
-    formantEditorSlider.setRange(0,formantManager.getNumberOfFormantSets()-1,1.0);
+    
+    formantEditorSlider.setRange(
+                        0,formantManager.getNumberOfFormantSets()-1,1.0);
+    formantEditorSlider.setValue(
+                        (double)formantManager.getCurrentFormantSetId());
+
     formantEditorSlider.repaint();
     
-    formantEditorSlider.setValue((double)formantManager.getCurrentFormantSetId());
+
+    // remove formants allowed only when number of formantSets > 2
+    removeFormantButton.setEnabled(
+                        formantManager.getNumberOfFormantSets() > 2);
     
-    removeFormantButton.setEnabled(formantManager.getNumberOfFormantSets() > 2);
-    
+    // set formants sliders to formant values
     for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
-        sliders[i*3]->setValue(formantManager.getCurrentFormantSet().getFormant(i).freq);
-        sliders[i*3+1]->setValue(formantManager.getCurrentFormantSet().getFormant(i).Q);
-        sliders[i*3+2]->setValue(formantManager.getCurrentFormantSet().getFormant(i).gain);
+        sliders[i*3]->setValue(
+            formantManager.getCurrentFormantSet().getFormant(i).freq);
+        sliders[i*3+1]->setValue(
+            formantManager.getCurrentFormantSet().getFormant(i).Q);
+        sliders[i*3+2]->setValue(
+            formantManager.getCurrentFormantSet().getFormant(i).gain);
     }
 }
