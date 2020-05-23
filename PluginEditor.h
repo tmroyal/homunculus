@@ -54,6 +54,7 @@ private:
     ToggleButton editModeButton;
         
     TextButton addFormantButton;
+    TextButton removeFormantButton;
     
     std::unique_ptr<SliderAttachment> lfoFreqSliderAttachment;
     std::unique_ptr<SliderAttachment> lfoAmountSliderAttachment;
@@ -66,10 +67,3 @@ private:
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HomunculusAudioProcessorEditor)
 };
-
-/*
- 1. keyboard in editor
- 2. keyboard state in processor
- 3. keyboard state gets called in process
- 4. keyboard state get cleared in a number of places
- */
