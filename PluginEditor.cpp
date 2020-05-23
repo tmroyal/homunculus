@@ -130,6 +130,12 @@ void HomunculusAudioProcessorEditor::setupEnvelopeSliders(){
     setupAttachedSlider(decaySlider, decayAttachment, "decay");
     setupAttachedSlider(sustainSlider, sustainAttachment, "sustain");
     setupAttachedSlider(releaseSlider, releaseAttachment, "release");
+    
+    attackSlider.setNumDecimalPlacesToDisplay(3);
+    decaySlider.setNumDecimalPlacesToDisplay(3);
+    sustainSlider.setNumDecimalPlacesToDisplay(3);
+    releaseSlider.setNumDecimalPlacesToDisplay(3);
+    
 }
 
 void HomunculusAudioProcessorEditor::setupLFOSliders(){
