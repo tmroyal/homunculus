@@ -31,6 +31,12 @@ public:
     void syncFormantManager();
 
 private:
+    // modularized constructors
+    void setupFormantSliders();
+    void setupEnvelopeSliders();
+    void setupLFOSliders();
+    void setupFormantUI();
+    
     MidiKeyboardComponent kbComponent;
     
     HomunculusAudioProcessor& processor;

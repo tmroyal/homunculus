@@ -17,12 +17,25 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         params(ps),
         formantManager(fmgr)
 {
-    // TODO: break constructor apart
-    
     setSize (400, 650);
     
     addAndMakeVisible(kbComponent);
     
+    setupFormantSliders();
+    setupEnvelopeSliders();
+    setupLFOSliders();
+    setupFormantUI();
+    
+    syncFormantManager();
+    resized();
+}
+
+HomunculusAudioProcessorEditor::~HomunculusAudioProcessorEditor()
+{
+}
+// -------------
+
+void HomunculusAudioProcessorEditor::setupFormantSliders(){
     for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
         std::string num = std::to_string(i+1);
         
@@ -58,30 +71,34 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         gainSlider->setNormalisableRange(NormalisableRange<double>(0.0,1.0,0,0.7));
         gainSlider->setEnabled(false);
     }
-    
+}
+
+void HomunculusAudioProcessorEditor::setupEnvelopeSliders(){
     addAndMakeVisible(attackSlider);
     addAndMakeVisible(decaySlider);
     addAndMakeVisible(sustainSlider);
     addAndMakeVisible(releaseSlider);
     
-    formantInterpolatorSliderAttachment.reset(
-                            new SliderAttachment(params, "interpolate", formantInterpolatorSlider));
-    
     attackAttachment.reset(new SliderAttachment(params, "attack", attackSlider));
     decayAttachment.reset(new SliderAttachment(params, "decay", decaySlider));
     sustainAttachment.reset(new SliderAttachment(params, "sustain", sustainSlider));
     releaseAttachment.reset(new SliderAttachment(params, "release", releaseSlider));
+    
+    formantInterpolatorSliderAttachment.reset(
+                                              new SliderAttachment(params, "interpolate", formantInterpolatorSlider));
+}
 
+void HomunculusAudioProcessorEditor::setupLFOSliders(){
     addAndMakeVisible(lfoFreqSlider);
     addAndMakeVisible(lfoAmountSlider);
     
     lfoFreqSliderAttachment.reset(new SliderAttachment(params, "lfoFreq", lfoFreqSlider));
     lfoAmountSliderAttachment.reset(new SliderAttachment(params, "lfoAmount", lfoAmountSlider));
-    
+}
+
+void HomunculusAudioProcessorEditor::setupFormantUI(){
     addAndMakeVisible(editModeButton);
-    
     addAndMakeVisible(formantEditorSlider);
-    
     addAndMakeVisible(formantInterpolatorSlider);
     
     formantInterpolatorSlider.setEnabled(true);
@@ -103,9 +120,9 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     formantEditorSlider.setValue(processor.getCurrentFormantSetId());
     
     formantEditorSlider.onValueChange = [this]{
-         formantManager.setCurrentFormantSet((int)formantEditorSlider.getValue());
+        formantManager.setCurrentFormantSet((int)formantEditorSlider.getValue());
         
-         syncFormantManager();
+        syncFormantManager();
     };
     
     addAndMakeVisible(addFormantButton);
@@ -122,20 +139,11 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     
     removeFormantButton.onClick = [this]{
         formantManager.removeFormant();
-
+        
         syncFormantManager();
-
+        
     };
-    
-    syncFormantManager();
-    resized();
 }
-
-HomunculusAudioProcessorEditor::~HomunculusAudioProcessorEditor()
-{
-}
-// -------------
-
 
 //==============================================================================
 void HomunculusAudioProcessorEditor::paint (Graphics& g)
