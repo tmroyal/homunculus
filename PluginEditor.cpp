@@ -76,16 +76,16 @@ void HomunculusAudioProcessorEditor::setupFormantSliders(){
 }
 
 void HomunculusAudioProcessorEditor::setupEnvelopeSliders(){
-    addAndMakeVisible(attackSlider);
-    addAndMakeVisible(decaySlider);
-    addAndMakeVisible(sustainSlider);
-    addAndMakeVisible(releaseSlider);
+    setupEnvelopeSlider(attackSlider, attackAttachment, "attack");
+    setupEnvelopeSlider(decaySlider, decayAttachment, "decay");
+    setupEnvelopeSlider(sustainSlider, sustainAttachment, "sustain");
+    setupEnvelopeSlider(releaseSlider, releaseAttachment, "release");
+}
+
+void HomunculusAudioProcessorEditor::setupEnvelopeSlider(Slider& slider, unique_ptr<SliderAttachment>& attachment, String parameterName){
     
-    attackAttachment.reset(new SliderAttachment(params, "attack", attackSlider));
-    decayAttachment.reset(new SliderAttachment(params, "decay", decaySlider));
-    sustainAttachment.reset(new SliderAttachment(params, "sustain", sustainSlider));
-    releaseAttachment.reset(new SliderAttachment(params, "release", releaseSlider));
-    
+    addAndMakeVisible(slider);
+    attachment.reset(new SliderAttachment(params, parameterName, slider));
 }
 
 void HomunculusAudioProcessorEditor::setupLFOSliders(){
@@ -120,9 +120,6 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
         }
     };
     
-    formantEditorSlider.setRange(0,processor.getNumFormantSets()-1,1);
-    formantEditorSlider.setValue(processor.getCurrentFormantSetId());
-    
     formantEditorSlider.onValueChange = [this]{
         formantManager.setCurrentFormantSet((int)formantEditorSlider.getValue());
         
@@ -139,7 +136,6 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
     
     addAndMakeVisible(removeFormantButton);
     removeFormantButton.setButtonText("-");
-    removeFormantButton.setEnabled(false);
     
     removeFormantButton.onClick = [this]{
         formantManager.removeFormant();
@@ -147,6 +143,7 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
         syncFormantManager();
         
     };
+
 }
 
 //==============================================================================

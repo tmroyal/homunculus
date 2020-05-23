@@ -37,6 +37,8 @@ private:
     void setupLFOSliders();
     void setupFormantUI();
     
+    void setupEnvelopeSlider(Slider& slider, unique_ptr<SliderAttachment>& attachment, String parameterName);
+    
     MidiKeyboardComponent kbComponent;
     
     HomunculusAudioProcessor& processor;
