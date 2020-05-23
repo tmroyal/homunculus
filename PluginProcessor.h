@@ -69,8 +69,7 @@ public:
     void setFrequency(int formant, float freq);
     void setQ(int formant, float Q);
     void setGain(int formant, float gain);
-    int getNumFormantSets();
-    int getCurrentFormantSetId();
+
     
     MidiKeyboardState keyboardState;
     

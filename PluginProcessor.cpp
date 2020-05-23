@@ -74,13 +74,6 @@ void HomunculusAudioProcessor::parameterChanged (const String& parameterID, floa
     }
 }
 
-int HomunculusAudioProcessor::getNumFormantSets(){
-    return formantManager.getNumberOfFormantSets();
-}
-
-int HomunculusAudioProcessor::getCurrentFormantSetId(){
-    return formantManager.getCurrentFormantSetId();
-}
 
 void HomunculusAudioProcessor::setSynthParams(){
     for (auto i = 0; i < NUMBER_OF_VOICES; i++){
