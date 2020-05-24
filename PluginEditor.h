@@ -13,6 +13,8 @@
 #include "HumConstants.h"
 #include "FormantManager.h"
 #include "HumLook.h"
+#include "FormantVisualiser.h"
+
 //==============================================================================
 /**
 */
@@ -33,6 +35,8 @@ public:
 
 private:
     HumLook lookAndFeel;
+    
+    FormantVisualiser formVis;
     
     // labels
     

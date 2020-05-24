@@ -12,6 +12,7 @@
 //==============================================================================
 HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioProcessor& p, AudioProcessorValueTreeState& ps, FormantManager& fmgr)
     : AudioProcessorEditor (&p),
+        formVis(p),
         kbComponent(p.keyboardState, MidiKeyboardComponent::horizontalKeyboard),
         processor (p),
         params(ps),
@@ -33,6 +34,9 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     setupFormantUI();
     
     syncFormantManager();
+
+    addAndMakeVisible(formVis);
+    formVis.refreshData();
     
     resized();
 }
@@ -288,6 +292,8 @@ void HomunculusAudioProcessorEditor::paint (Graphics& g)
     
     // between flo and formants
     g.drawLine(LFO_LEFT, FORMANTS_TOP-LABEL_SIZE*0.25, LFO_LEFT+2*BOX_SIZE, FORMANTS_TOP-LABEL_SIZE*0.25);
+    
+    //formVis.paint(g);
 
 }
 
@@ -301,6 +307,8 @@ void HomunculusAudioProcessorEditor::resized()
     titleLabel.setBounds(TITLE_LEFT,0,BOX_SIZE*2, getHeight()-80);
 
     kbComponent.setBounds(0, getHeight()-80, getWidth(), 80);
+    
+    formVis.setBounds(FORMANTS_LEFT-LABEL_SIZE, FORMANTS_TOP+BOX_SIZE*0.5, BOX_SIZE*3, BOX_SIZE*2);
     
 }
 
