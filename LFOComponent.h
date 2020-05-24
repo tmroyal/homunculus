@@ -22,9 +22,7 @@ public:
     {
         setupLabel(lfoRateLabel, "LFO Hz.");
         setupLabel(lfoAmountLabel, "LFO %");
-        
-        setupAttachedSlider(lfoFreqSlider, lfoFreqSliderAttachment, "lfoFreq");
-        
+                
         setupAttachedSlider(lfoFreqSlider, lfoFreqSliderAttachment, "lfoFreq");
         setupAttachedSlider(lfoAmountSlider, lfoAmountSliderAttachment, "lfoAmount");
     }
