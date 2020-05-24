@@ -16,21 +16,23 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         kbComponent(p.keyboardState, MidiKeyboardComponent::horizontalKeyboard),
         processor (p),
         params(ps),
-        formantManager(fmgr)
+        formantManager(fmgr),
+        lfoPanel(p, ps, lookAndFeel)
+
 {
     setSize (FORMANT_EDITOR_LEFT+BOX_SIZE*4.3-80, 480);
     
     setLookAndFeel(&lookAndFeel);
-    lookAndFeel.setColour(Slider::textBoxOutlineColourId, Colours::transparentBlack);
 
-
+    addAndMakeVisible(lfoPanel);
+    
     setupLabels();
     
     addAndMakeVisible(kbComponent);
     
     setupFormantSliders();
     setupEnvelopeSliders();
-    setupLFOSliders();
+    //setupLFOSliders();
     setupFormantUI();
     
     syncFormantManager();
@@ -64,8 +66,6 @@ void HomunculusAudioProcessorEditor::setupLabels(){
     setupLabel(selectFormantLabel, "Edit Sel.");
     selectFormantLabel.setVisible(false);
     setupLabel(interpolateFormantLabel, "Morph");
-    setupLabel(lfoRateLabel, "LFO Hz.");
-    setupLabel(lfoAmountLabel, "LFO %");
     setupLabel(interpolateButtonLabel, "Edit");
     interpolateButtonLabel.setFont(Font(12.0));
 }
@@ -309,7 +309,8 @@ void HomunculusAudioProcessorEditor::resized()
     resizeFormantControls();
     resizeADSRControls();
     resizeFormantEditors();
-    resizeLFOControls();
+    //resizeLFOControls();
+    lfoPanel.setBounds(LFO_LEFT, LFO_TOP, BOX_SIZE*2, BOX_SIZE+LABEL_SIZE);
     
     titleLabel.setBounds(TITLE_LEFT,0,BOX_SIZE*2, getHeight()-80);
 

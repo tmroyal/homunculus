@@ -17,6 +17,7 @@ public:
     HumLook(){
         setColourScheme(LookAndFeel_V4::getMidnightColourScheme());
         setColour(ToggleButton::tickColourId, Colour(219, 111, 61));
+        setColour(Slider::textBoxOutlineColourId, Colours::transparentBlack);
         
     }
     void drawRotarySlider (Graphics&, int x, int y, int width, int height,
