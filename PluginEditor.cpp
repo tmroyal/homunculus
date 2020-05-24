@@ -17,7 +17,8 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
         processor (p),
         params(ps),
         formantManager(fmgr),
-        lfoPanel(p, ps, lookAndFeel)
+        lfoPanel(p, ps, lookAndFeel),
+        adsrPanel(p, ps, lookAndFeel)
 
 {
     setSize (FORMANT_EDITOR_LEFT+BOX_SIZE*4.3-80, 480);
@@ -25,13 +26,13 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     setLookAndFeel(&lookAndFeel);
 
     addAndMakeVisible(lfoPanel);
+    addAndMakeVisible(adsrPanel);
     
     setupLabels();
     
     addAndMakeVisible(kbComponent);
     
-    setupFormantSliders();
-    setupEnvelopeSliders();
+    setupFormantSliders();;
 
     setupFormantUI();
     
@@ -59,10 +60,7 @@ void HomunculusAudioProcessorEditor::setupLabels(){
     setupLabel(f1Label, "F1");
     setupLabel(f2Label, "F2");
     setupLabel(f3Label, "F3");
-    setupLabel(envALabel, "A");
-    setupLabel(envDLabel, "D");
-    setupLabel(envSLabel, "S");
-    setupLabel(envRLabel, "R");
+
     setupLabel(selectFormantLabel, "Edit Sel.");
     selectFormantLabel.setVisible(false);
     setupLabel(interpolateFormantLabel, "Morph");
@@ -129,18 +127,7 @@ void HomunculusAudioProcessorEditor::setupFormantSliders(){
     }
 }
 
-void HomunculusAudioProcessorEditor::setupEnvelopeSliders(){
-    setupAttachedSlider(attackSlider, attackAttachment, "attack");
-    setupAttachedSlider(decaySlider, decayAttachment, "decay");
-    setupAttachedSlider(sustainSlider, sustainAttachment, "sustain");
-    setupAttachedSlider(releaseSlider, releaseAttachment, "release");
-    
-    attackSlider.setNumDecimalPlacesToDisplay(3);
-    decaySlider.setNumDecimalPlacesToDisplay(3);
-    sustainSlider.setNumDecimalPlacesToDisplay(3);
-    releaseSlider.setNumDecimalPlacesToDisplay(3);
-    
-}
+
 
 
 
@@ -286,7 +273,7 @@ void HomunculusAudioProcessorEditor::paint (Graphics& g)
     // draw divider lines
     
     // between formants and adsr
-    g.drawLine(ADSR_LEFT-LABEL_SIZE*2, 10, ADSR_LEFT-LABEL_SIZE*2, getHeight()-90);
+    g.drawLine(ADSR_LEFT+LABEL_SIZE*0.5, 10, ADSR_LEFT+LABEL_SIZE*0.5, getHeight()-90);
     
     // between adsr and formant chooser panel
     g.drawLine(FORMANT_EDITOR_LEFT, 10, FORMANT_EDITOR_LEFT, getHeight()-90);
@@ -304,10 +291,10 @@ void HomunculusAudioProcessorEditor::paint (Graphics& g)
 void HomunculusAudioProcessorEditor::resized()
 {
     resizeFormantControls();
-    resizeADSRControls();
     resizeFormantEditors();
 
     lfoPanel.setBounds(LFO_LEFT, LFO_TOP, BOX_SIZE*2, BOX_SIZE+LABEL_SIZE);
+    adsrPanel.setBounds(ADSR_LEFT, ADSR_TOP, BOX_SIZE*2, getHeight());
     
     titleLabel.setBounds(TITLE_LEFT,0,BOX_SIZE*2, getHeight()-80);
 
@@ -334,20 +321,6 @@ void HomunculusAudioProcessorEditor::resizeFormantControls(){
         (**it).setBounds((i/3)*BOX_SIZE+FORMANTS_LEFT, (i%3)*BOX_SIZE+FORMANTS_TOP+LABEL_SIZE, BOX_SIZE, BOX_SIZE);
         it++; i++;
     }
-}
-
-void HomunculusAudioProcessorEditor::resizeADSRControls(){
-        envALabel.setBounds(ADSR_LEFT-LABEL_SIZE*2.5, ADSR_TOP, BOX_SIZE, BOX_SIZE);
-    envDLabel.setBounds(ADSR_LEFT-LABEL_SIZE*2.5, ADSR_TOP+BOX_SIZE, BOX_SIZE, BOX_SIZE);
-    envSLabel.setBounds(ADSR_LEFT-LABEL_SIZE*2.5, ADSR_TOP+BOX_SIZE*2, BOX_SIZE, BOX_SIZE);
-    envRLabel.setBounds(ADSR_LEFT-LABEL_SIZE*2.5, ADSR_TOP+BOX_SIZE*3, BOX_SIZE, BOX_SIZE);
-    
-    
-    attackSlider.setBounds(ADSR_LEFT, ADSR_TOP, BOX_SIZE, BOX_SIZE);
-    decaySlider.setBounds(ADSR_LEFT, BOX_SIZE+ADSR_TOP, BOX_SIZE, BOX_SIZE);
-    sustainSlider.setBounds(ADSR_LEFT, 2*BOX_SIZE+ADSR_TOP, BOX_SIZE, BOX_SIZE);
-    releaseSlider.setBounds(ADSR_LEFT, 3*BOX_SIZE+ADSR_TOP, BOX_SIZE, BOX_SIZE);
-
 }
 
 void HomunculusAudioProcessorEditor::resizeFormantEditors(){

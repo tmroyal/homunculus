@@ -22,7 +22,7 @@ const static int BOX_SIZE = 80;
 const static int FORMANTS_LEFT = 30;
 const static int FORMANTS_TOP = 120;
 
-const static int ADSR_LEFT = 310;
+const static int ADSR_LEFT = 260;
 const static int ADSR_TOP = LABEL_SIZE*2;
 
 const static int FORMANT_EDITOR_LEFT = 390;
