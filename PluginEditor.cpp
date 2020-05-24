@@ -184,6 +184,9 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
         selectFormantLabel.setVisible(toggleState);
         interpolateFormantLabel.setVisible(!toggleState);
         
+        formVis.setVisible(!toggleState);
+        formVis.setEnabled(toggleState);
+        
         if (toggleState){
             syncFormantManager();
         } else {
