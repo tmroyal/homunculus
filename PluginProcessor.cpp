@@ -106,6 +106,14 @@ void HomunculusAudioProcessor::setGain(int formant, float gain){
 }
 
 
+double HomunculusAudioProcessor::freqResponseAt(double angle){
+    float amp = 0.0;
+    for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
+        amp += dynamic_cast<HumBPF*>(filters[i]->getProcessor())->freqResponseAt(angle);
+    }
+    return amp;
+}
+
 //==============================================================================
 const String HomunculusAudioProcessor::getName() const
 {

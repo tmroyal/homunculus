@@ -13,6 +13,7 @@
 #pragma once
 
 #include "ProcessorBase.h"
+#include <complex>
 
 // a mono resonance filter
 class HumBPF : public ProcessorBase {
@@ -86,6 +87,13 @@ public:
         }
     }
     
+    double freqResponseAt(double angle){
+        std::complex<double> z1 = exp_z(angle, 1.0);
+        std::complex<double> z2 = exp_z(angle, 2.0);
+        std::complex<double> H = gain*( b0 + b1*z1 + b2*z2)/(1.0+a1*z1+a2*z2);
+
+        return std::abs(H);
+    }
     
 private:
     double b0, b1, b2, a0, a1, a2;
@@ -94,6 +102,11 @@ private:
     double gain;
     
     float rnd;
+    
+    std::complex<double> exp_z(double delt, double power){
+        std::complex<double> ni(0.0,-1);
+        return std::exp(ni*delt*power);
+    }
     
     static BusesProperties getBusesProperties()
     {

@@ -160,6 +160,10 @@ void HomunculusAudioProcessorEditor::setupFormantUI(){
     setupAttachedSlider(formantInterpolatorSlider, formantInterpolatorSliderAttachment, "interpolate");
     formantInterpolatorSlider.setSliderStyle(Slider::LinearVertical);
     formantInterpolatorSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 80, LABEL_SIZE);
+    formantInterpolatorSlider.onValueChange = [this]{
+        formVis.refreshData();
+        formVis.repaint();
+    };
     
     // setup edit mode button
     addAndMakeVisible(editModeButton);

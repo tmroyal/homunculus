@@ -74,6 +74,8 @@ public:
     MidiKeyboardState keyboardState;
     void resetInterpolator();
     
+    double freqResponseAt(double angle);
+    
 private:
     void setSynthParams();
     void interpolateFormants(float value);

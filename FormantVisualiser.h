@@ -36,8 +36,7 @@ public:
         
         for (int i = 0; i < VIS_TABLE_SIZE; i++){
             double ind = exp((EXP_INDEX*i)/VIS_TABLE_SIZE)/maxExp;
-            //visTable[i] = prc.freqResponseAt(ind*MathConstants<double>*pi);
-            visTable[i] = 0.35;
+            visTable[i] = processor.freqResponseAt(ind*MathConstants<double>::pi)/2;
         }
     }
     
