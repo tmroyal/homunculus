@@ -66,6 +66,9 @@ public:
         b2 = -alpha/a0;
         a1 = -2*cos(omega)/a0;
         a2 = (1-alpha)/a0;
+        
+        // a0/a0
+        a0 = 1;
     }
     
     void processBlock(AudioSampleBuffer& buffer, MidiBuffer&) override {
