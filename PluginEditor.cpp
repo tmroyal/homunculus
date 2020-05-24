@@ -32,7 +32,7 @@ HomunculusAudioProcessorEditor::HomunculusAudioProcessorEditor (HomunculusAudioP
     
     setupFormantSliders();
     setupEnvelopeSliders();
-    //setupLFOSliders();
+
     setupFormantUI();
     
     syncFormantManager();
@@ -142,10 +142,7 @@ void HomunculusAudioProcessorEditor::setupEnvelopeSliders(){
     
 }
 
-void HomunculusAudioProcessorEditor::setupLFOSliders(){
-    setupAttachedSlider(lfoFreqSlider, lfoFreqSliderAttachment, "lfoFreq");
-    setupAttachedSlider(lfoAmountSlider, lfoAmountSliderAttachment, "lfoAmount");
-}
+
 
 void HomunculusAudioProcessorEditor::setupAttachedSlider(Slider& slider, unique_ptr<SliderAttachment>& attachment, String parameterName){
     
@@ -309,7 +306,7 @@ void HomunculusAudioProcessorEditor::resized()
     resizeFormantControls();
     resizeADSRControls();
     resizeFormantEditors();
-    //resizeLFOControls();
+
     lfoPanel.setBounds(LFO_LEFT, LFO_TOP, BOX_SIZE*2, BOX_SIZE+LABEL_SIZE);
     
     titleLabel.setBounds(TITLE_LEFT,0,BOX_SIZE*2, getHeight()-80);
@@ -366,14 +363,4 @@ void HomunculusAudioProcessorEditor::resizeFormantEditors(){
     removeFormantButton.setBounds(FORMANT_EDITOR_LEFT+80, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight, 40, buttonHeight);
     interpolateButtonLabel.setBounds(FORMANT_EDITOR_LEFT+80, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight*2, 40, 24);
     editModeButton.setBounds(FORMANT_EDITOR_LEFT+80, FORMANT_EDITOR_TOP+LABEL_SIZE+buttonHeight*2+24, 40, buttonHeight-24);
-}
-
-
-void HomunculusAudioProcessorEditor::resizeLFOControls(){
-    lfoRateLabel.setBounds(LFO_LEFT, LFO_TOP, BOX_SIZE, LABEL_SIZE);
-    lfoFreqSlider.setBounds(LFO_LEFT, LFO_TOP+LABEL_SIZE, BOX_SIZE, BOX_SIZE);
-    
-    lfoAmountLabel.setBounds(LFO_LEFT+BOX_SIZE, LFO_TOP, BOX_SIZE, LABEL_SIZE);
-    lfoAmountSlider.setBounds(LFO_LEFT+BOX_SIZE, LFO_TOP+LABEL_SIZE, BOX_SIZE, BOX_SIZE);
-    
 }

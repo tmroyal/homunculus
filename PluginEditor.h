@@ -39,12 +39,10 @@ private:
     
     FormantVisualiser formVis;
     
-    
     // labels
     
     Label titleLabel;
-    Label lfoRateLabel;
-    Label lfoAmountLabel;
+
     
     Label f1Label;
     Label f2Label;
@@ -65,7 +63,6 @@ private:
     // modularized constructors
     void setupFormantSliders();
     void setupEnvelopeSliders();
-    void setupLFOSliders();
     void setupFormantUI();
     void setupLabels();
     
@@ -89,8 +86,6 @@ private:
     Slider formantEditorSlider;
     Slider formantInterpolatorSlider;
     
-    Slider lfoFreqSlider;
-    Slider lfoAmountSlider;
     
     ToggleButton editModeButton;
         
@@ -110,7 +105,7 @@ private:
     void resizeFormantControls();
     void resizeADSRControls();
     void resizeFormantEditors();
-    void resizeLFOControls();
+   
     LFOComponent lfoPanel;
 
     
