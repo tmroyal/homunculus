@@ -110,7 +110,6 @@ private:
     void resizeFormantEditors();
     void resizeLFOControls();
     
-    // weak point | magic numbers
     const static int LABEL_SIZE = 20;
     const static int BOX_SIZE = 80;
     
