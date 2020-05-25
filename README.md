@@ -20,7 +20,7 @@ Interpolating between formants involves moving the slider labeled *Morph*. When 
 To add, remove, and edit formant sets, press the edit button which will put the plugin into *Edit Mode*.
 
 ### Edit Mode Image
-![Homunculus edit mode](Documentation/homunculus_performance_mode.png)
+![Homunculus edit mode](Documentation/homunculus_edit_mode.png)
 
 ### Edit Mode
 
