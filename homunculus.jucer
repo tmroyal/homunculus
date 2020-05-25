@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT id="wI5ukX" name="homunculus" projectType="audioplug" jucerVersion="5.4.7"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              pluginManufacturer="Proud Bear" pluginDesc="a formant voice synthesizer"
+              pluginManufacturerCode="Prdb" pluginAUMainType="'augn'">
+  <MAINGROUP id="qRi3Kf" name="homunculus">
+    <GROUP id="{5C6AF4DB-071C-C7AA-191D-2A6609579F55}" name="Source">
+      <FILE id="a0enop" name="HumConstants.h" compile="0" resource="0" file="Source/HumConstants.h"/>
+      <FILE id="dC5fz7" name="SineTable.cpp" compile="1" resource="0" file="Source/SineTable.cpp"/>
+      <FILE id="BkV9vt" name="SineTable.h" compile="0" resource="0" file="Source/SineTable.h"/>
+      <FILE id="U9h8nI" name="ProcessorBase.h" compile="0" resource="0" file="Source/ProcessorBase.h"/>
+      <FILE id="QPpcUX" name="BlitSynth.cpp" compile="1" resource="0" file="Source/BlitSynth.cpp"/>
+      <FILE id="XIvDTv" name="BlitSynth.h" compile="0" resource="0" file="Source/BlitSynth.h"/>
+      <FILE id="XjQ4oe" name="HumBPF.cpp" compile="1" resource="0" file="Source/HumBPF.cpp"/>
+      <FILE id="wNOZoS" name="HumBPF.h" compile="0" resource="0" file="Source/HumBPF.h"/>
+      <FILE id="PABf5x" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
+      <FILE id="RbXhX1" name="PluginProcessor.h" compile="0" resource="0"
+            file="Source/PluginProcessor.h"/>
+      <FILE id="w1Zgxj" name="FormantManager.cpp" compile="1" resource="0"
+            file="Source/FormantManager.cpp"/>
+      <FILE id="xxthny" name="FormantManager.h" compile="0" resource="0"
+            file="Source/FormantManager.h"/>
+      <FILE id="NH8mlM" name="HumLook.cpp" compile="1" resource="0" file="Source/HumLook.cpp"/>
+      <FILE id="PPth7V" name="HumLook.h" compile="0" resource="0" file="Source/HumLook.h"/>
+      <FILE id="lVaQ9n" name="FormantVisualiser.cpp" compile="1" resource="0"
+            file="Source/FormantVisualiser.cpp"/>
+      <FILE id="QXvKWD" name="FormantVisualiser.h" compile="0" resource="0"
+            file="Source/FormantVisualiser.h"/>
+      <FILE id="utY8Nx" name="HumComponent.cpp" compile="1" resource="0"
+            file="Source/HumComponent.cpp"/>
+      <FILE id="KnZNbc" name="HumComponent.h" compile="0" resource="0" file="Source/HumComponent.h"/>
+      <FILE id="hFdx3s" name="FormantFilterPanel.cpp" compile="1" resource="0"
+            file="Source/FormantFilterPanel.cpp"/>
+      <FILE id="KGimti" name="FormantFilterPanel.h" compile="0" resource="0"
+            file="Source/FormantFilterPanel.h"/>
+      <FILE id="Dyqojx" name="FormantSelectorPanel.cpp" compile="1" resource="0"
+            file="Source/FormantSelectorPanel.cpp"/>
+      <FILE id="gqS8Iu" name="FormantSelectorPanel.h" compile="0" resource="0"
+            file="Source/FormantSelectorPanel.h"/>
+      <FILE id="zjGOwr" name="LFOComponent.cpp" compile="1" resource="0"
+            file="Source/LFOComponent.cpp"/>
+      <FILE id="UJJFSC" name="LFOComponent.h" compile="0" resource="0" file="Source/LFOComponent.h"/>
+      <FILE id="CltWlK" name="ADSRComponent.cpp" compile="1" resource="0"
+            file="Source/ADSRComponent.cpp"/>
+      <FILE id="UYlWmR" name="ADSRComponent.h" compile="0" resource="0" file="Source/ADSRComponent.h"/>
+      <FILE id="y1Vxh0" name="PluginEditor.cpp" compile="1" resource="0"
+            file="Source/PluginEditor.cpp"/>
+      <FILE id="Fx5eq5" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_MAC targetFolder="Builds/MacOSX">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_audio_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_devices" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_formats" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_processors" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_audio_utils" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_core" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_data_structures" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_events" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_graphics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_basics" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_gui_extra" path="../../../JUCE/modules"/>
+        <MODULEPATH id="juce_opengl" path="../../../JUCE/modules"/>
+      </MODULEPATHS>
+    </XCODE_MAC>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+            useGlobalPath="1"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+  </MODULES>
+  <LIVE_SETTINGS>
+    <OSX/>
+  </LIVE_SETTINGS>
+  <JUCEOPTIONS JUCE_VST3_CAN_REPLACE_VST2="0" JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
+</JUCERPROJECT>
