@@ -11,7 +11,7 @@ This plugin includes a very simple LFO vibrato that can be controlled using the 
 It also includes a very simple amplitude envelope that can be controlled using the *A*, *D*, *S*, and *R* knobs.
 
 ### Performance Mode Image
-![Homunculus performance mode](Documents/homunculus_performance_mode.png)
+![Homunculus performance mode](Documentation/homunculus_performance_mode.png)
 
 ### Performance Mode
 
@@ -20,7 +20,7 @@ Interpolating between formants involves moving the slider labeled *Morph*. When 
 To add, remove, and edit formant sets, press the edit button which will put the plugin into *Edit Mode*.
 
 ### Edit Mode Image
-![Homunculus edit mode](Documents/homunculus_performance_mode.png)
+![Homunculus edit mode](Documentation/homunculus_performance_mode.png)
 
 ### Edit Mode
 
