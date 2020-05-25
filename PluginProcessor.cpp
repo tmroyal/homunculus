@@ -99,22 +99,30 @@ void HomunculusAudioProcessor::setSynthParams(){
 }
 
 void HomunculusAudioProcessor::setFrequency(int formant, float freq){
-    dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setFreq(freq);
+    if (filters.size() > 0){
+        dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setFreq(freq);
+    }
 }
 
 void HomunculusAudioProcessor::setQ(int formant, float Q){
-    dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setQ(Q);
+    if (filters.size() > 0){
+        dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setQ(Q);
+    }
 }
 
 void HomunculusAudioProcessor::setGain(int formant, float gain){
-    dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setGain(gain);
+    if (filters.size() > 0){
+        dynamic_cast<HumBPF*>(filters[formant]->getProcessor())->setGain(gain);
+    }
 }
 
 
 double HomunculusAudioProcessor::freqResponseAt(double angle){
     float amp = 0.0;
-    for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
-        amp += dynamic_cast<HumBPF*>(filters[i]->getProcessor())->freqResponseAt(angle);
+    if (filters.size() > 0){
+        for (int i = 0; i < NUMBER_OF_FORMANTS; i++){
+            amp += dynamic_cast<HumBPF*>(filters[i]->getProcessor())->freqResponseAt(angle);
+        }
     }
     return amp;
 }
@@ -217,6 +225,13 @@ void HomunculusAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
         filterBankGraph->addConnection({
             {newNode->nodeID, 0}, {filterBankOutputNode->nodeID, 0}
         });
+    }
+    
+    // we do this here in the event that filters are cleared
+    // and we need to re populate the visualiser
+    HomunculusAudioProcessorEditor* editor = dynamic_cast<HomunculusAudioProcessorEditor*>(getActiveEditor());
+    if (editor != nullptr){
+        editor->updateVisualiser();
     }
 
     setSynthParams();
