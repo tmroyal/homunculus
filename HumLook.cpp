@@ -10,6 +10,14 @@
 
 #include "HumLook.h"
 
+
+HumLook::HumLook(){
+    setColourScheme(LookAndFeel_V4::getMidnightColourScheme());
+    setColour(ToggleButton::tickColourId, Colour(219, 111, 61));
+    setColour(Slider::textBoxOutlineColourId, Colours::transparentBlack);
+    
+}
+
 void HumLook::drawRotarySlider (Graphics& g, int x, int y, int width, int height,
                                   float sliderPos, float rotaryStartAngle,
                                   float rotaryEndAngle, Slider& slider)

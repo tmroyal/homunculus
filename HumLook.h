@@ -14,12 +14,7 @@
 
 class HumLook : public LookAndFeel_V4 {
 public:
-    HumLook(){
-        setColourScheme(LookAndFeel_V4::getMidnightColourScheme());
-        setColour(ToggleButton::tickColourId, Colour(219, 111, 61));
-        setColour(Slider::textBoxOutlineColourId, Colours::transparentBlack);
-        
-    }
+    HumLook();
     void drawRotarySlider (Graphics&, int x, int y, int width, int height,
                            float sliderPosProportional, float rotaryStartAngle,
                            float rotaryEndAngle, Slider&) override;
