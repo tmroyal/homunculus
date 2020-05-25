@@ -19,7 +19,7 @@
 const static int LABEL_SIZE = 20;
 const static int BOX_SIZE = 80;
 
-const static int FORMANTS_LEFT = 30;
+const static int FORMANTS_LEFT = -20;
 const static int FORMANTS_TOP = 120;
 
 const static int ADSR_LEFT = 260;

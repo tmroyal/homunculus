@@ -17,6 +17,7 @@
 #include "FormantVisualiser.h"
 #include "LFOComponent.h"
 #include "ADSRComponent.h"
+#include "FormantFilterPanel.h"
 
 //==============================================================================
 /**
@@ -45,20 +46,11 @@ private:
     Label titleLabel;
 
     
-    Label f1Label;
-    Label f2Label;
-    Label f3Label;
-    Label freqLabel;
-    Label QLabel;
-    Label gainLabel;
-
-    
     Label selectFormantLabel;
     Label interpolateFormantLabel;
     Label interpolateButtonLabel;
     
     // modularized constructors
-    void setupFormantSliders();
     void setupFormantUI();
     void setupLabels();
     
@@ -69,8 +61,6 @@ private:
     
     HomunculusAudioProcessor& processor;
     AudioProcessorValueTreeState& params;
-    
-    OwnedArray<Slider> sliders;
     
     FormantManager& formantManager;
     
@@ -94,6 +84,7 @@ private:
    
     LFOComponent lfoPanel;
     ADSRComponent adsrPanel;
+    FormantFilterPanel filterPanel;
 
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (HomunculusAudioProcessorEditor)

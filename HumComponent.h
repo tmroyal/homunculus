@@ -27,7 +27,9 @@ public:
     }
     
     ~HumComponent()
-    {}
+    {
+        setLookAndFeel(nullptr);
+    }
     
     void setupLabel(Label& label, String labelText){
         addAndMakeVisible(label);
@@ -46,7 +48,7 @@ public:
 
     void resized() override {}
 
-private:
+protected:
     HomunculusAudioProcessor& processor;
     AudioProcessorValueTreeState& params;
     HumLook& lookAndFeel;
