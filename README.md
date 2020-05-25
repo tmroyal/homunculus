@@ -19,12 +19,12 @@ Interpolating between formants involves moving the slider labeled *Morph*. When 
 
 To add, remove, and edit formant sets, press the edit button which will put the plugin into *Edit Mode*.
 
-### Edit Mode Image
-![Homunculus edit mode](Documentation/homunculus_edit_mode.png)
+### Editor Mode Image
+![Homunculus editor mode](Documentation/homunculus_editor_mode.png)
 
-### Edit Mode
+### Editor Mode
 
-The edit mode allows the editing of **formant sets**. Each formant set includes three bandpass filters with editable frequency, Q, and gain. The parameters of each filter can be edited by the knobs on the left hand side of the plugin. The formants are labeled *F1*, *F2*, and *F3* and the paramters for each filter are labels *F* (frequency), *Q* and *Gain*.
+The editor mode allows the editing of **formant sets**. Each formant set includes three bandpass filters with editable frequency, Q, and gain. The parameters of each filter can be edited by the knobs on the left hand side of the plugin. The formants are labeled *F1*, *F2*, and *F3* and the paramters for each filter are labels *F* (frequency), *Q* and *Gain*.
 
 To change the currently edited formant set, move the slider labeled *Edit Sel.*.
 
