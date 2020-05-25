@@ -82,6 +82,11 @@ void HomunculusAudioProcessor::interpolateFormants(float value){
         setGain(i, fmt.gain);
         setQ(i, fmt.Q);
     }
+    
+    HomunculusAudioProcessorEditor* editor = dynamic_cast<HomunculusAudioProcessorEditor*>(getActiveEditor());
+    if (editor != nullptr){
+        editor->updateVisualiser();
+    }
 }
 
 

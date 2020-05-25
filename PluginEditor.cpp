@@ -108,6 +108,11 @@ void HomunculusAudioProcessorEditor::syncFormantManager(){
 
 }
 
+void HomunculusAudioProcessorEditor::updateVisualiser(){
+    formVis.refreshData();
+    formVis.repaint();
+}
+
 
 //==============================================================================
 void HomunculusAudioProcessorEditor::paint (Graphics& g)

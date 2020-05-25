@@ -36,6 +36,7 @@ public:
     void resized() override;
     
     void syncFormantManager();
+    void updateVisualiser();
 
 private:
     void setupFormantPanelLambdas();
