@@ -35,11 +35,6 @@ void FormantSelectorPanel::setupSlider(){
     setupAttachedSlider(formantInterpolatorSlider, formantInterpolatorSliderAttachment, "interpolate");
     formantInterpolatorSlider.setSliderStyle(Slider::LinearVertical);
     formantInterpolatorSlider.setTextBoxStyle(Slider::TextBoxBelow, true, 80, LABEL_SIZE);
-    
-    // BUG
-    /*formantInterpolatorSlider.onValueChange = [this]{
-        if (onInterpolatorSlider != nullptr){ onInterpolatorSlider(); }
-    };*/
 }
 
 void FormantSelectorPanel::setupEditButton(){

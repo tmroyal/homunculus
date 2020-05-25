@@ -109,7 +109,7 @@ private:
         
         newParams.push_back(std::make_unique<AudioParameterFloat>("attack", "Attack",envRange,0.1));
         newParams.push_back(std::make_unique<AudioParameterFloat>("decay", "Decay",envRange,0.3));
-        newParams.push_back(std::make_unique<AudioParameterFloat>("sustain", "Sustain",envRange,0.9));
+        newParams.push_back(std::make_unique<AudioParameterFloat>("sustain", "Sustain",NormalisableRange<float>(0.0,1.0,0.0,0.3),0.9));
         newParams.push_back(std::make_unique<AudioParameterFloat>("release", "Release",envRange,0.5));
 
         newParams.push_back(std::make_unique<AudioParameterFloat>("interpolate", "Morph Index", 0.0, 1.0, 0.0));
