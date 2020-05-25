@@ -31,4 +31,4 @@ const static int FORMANT_EDITOR_TOP = 10;
 const static int LFO_LEFT = BOX_SIZE-LABEL_SIZE;
 const static int LFO_TOP = LABEL_SIZE*0.5;
 
-const static int TITLE_LEFT = FORMANT_EDITOR_LEFT+BOX_SIZE*2.3-80;
+const static int TITLE_LEFT = FORMANT_EDITOR_LEFT+BOX_SIZE*1.6;
