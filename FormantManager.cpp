@@ -85,10 +85,16 @@ void FormantSet::defaultInit(){
 
 
 FormantManager::FormantManager(){
+    Random rand;
     for (int i = 0; i < NUMBER_INITIAL_FORMANT_SETS; i++){
         formantSets.push_back(FormantSet());
+       
+        for (int fn = 0; fn < NUMBER_OF_FORMANTS; fn++){
+            formantSets[i].setFreq(fn, rand.nextFloat()*5000.0+100.0);
+            formantSets[i].setQ(fn, rand.nextFloat()*10.0+1.0);
+
+        }
     }
-    
 }
 
 void FormantManager::setFreq(int formantNumber, float freq){
