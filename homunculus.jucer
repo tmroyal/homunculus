@@ -2,8 +2,8 @@
 
 <JUCERPROJECT id="wI5ukX" name="homunculus" projectType="audioplug" jucerVersion="5.4.7"
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
-              pluginManufacturer="Proud Bear" pluginDesc="a formant voice synthesizer"
-              pluginManufacturerCode="Prdb" pluginAUMainType="'augn'">
+              pluginManufacturer="Thomas Royal" pluginDesc="a formant synthesizer"
+              pluginManufacturerCode="Tmrl" pluginAUMainType="'augn'" pluginCode="hmnc">
   <MAINGROUP id="qRi3Kf" name="homunculus">
     <GROUP id="{5C6AF4DB-071C-C7AA-191D-2A6609579F55}" name="Source">
       <FILE id="a0enop" name="HumConstants.h" compile="0" resource="0" file="Source/HumConstants.h"/>
