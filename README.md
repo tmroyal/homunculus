@@ -1,11 +1,9 @@
 # Homunculus - a Formant Synth Plugin (JUCE, GPL3)#
 
-Homunculus is a free and open source synth based on a very simplified model of the human voice. A band limited impulse train models the glottal pulses of the vocal cords, and a bank of resonant filters models the shape of the mouth. While this synth can create sounds that are human, it is capable of producing a range of sounds.
+Homunculus is a free and open source synth based on a very simplified model of the human voice. A band limited impulse train models glottal pulses, and a bank of resonant filters models the shape of the mouth, toungue, etc. While this synth can create sounds that are human, it is capable of producing a range of sounds.
 
 ## Using homunculus ##
-
-
-
+`
 ## Installation ##
 
 Coming soon.
