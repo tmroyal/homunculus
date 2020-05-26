@@ -2,6 +2,12 @@
 
 Homunculus is a free and open source synth based on a very simplified model of the human voice. A band limited impulse train models glottal pulses, and a bank of resonant filters models the shape of the mouth, toungue, etc. While this synth can create sounds that are human-like, it is capable of producing a range of sounds.
 
+## Installation ##
+
+There is a [macOS installer](https://github.com/tmroyal/homunculus/releases/download/v0.1.0/humunculus_0.1.0.dmg) available.
+
+A Windows installer is fortcoming very soon.
+
 ## Using homunculus ##
 
 ### LFO and ADSR
@@ -33,10 +39,6 @@ To add formants press the button labeled "+". To remove them, press the button l
 When the plugin first launches, formant parameters are selected at random.
 
 To go back to performance mode, press the *Edit* button.
-
-## Installation ##
-
-Coming soon.
 
 ## Motivation ##
 
