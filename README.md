@@ -7,6 +7,11 @@ Homunculus is a free and open source synth based on a very simplified model of t
 There are two procompiled installers:
 - [macOS installer](https://github.com/tmroyal/homunculus/releases/download/v0.1.0/humunculus_0.1.0.dmg)
 - [Windows installer](https://github.com/tmroyal/homunculus/releases/download/v0.1.0-beta/homunculus-0.1.0-windows.exe)
+<<<<<<< HEAD
+=======
+
+A Windows installer is fortcoming very soon.
+>>>>>>> 44c4597ec38e56c90d94c5ce17fa9d1b81259186
 
 ## Using homunculus ##
 
